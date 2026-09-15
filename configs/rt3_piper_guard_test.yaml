@@ -1,0 +1,60 @@
+experiment: rt3_piper_guard_test
+split: validation
+seed: 41
+expected_counts:
+  paired_controlled: 30
+  paired_zero: 6
+  head_stress: 6
+  extra_stress: 6
+provenance:
+  factor_train_state_ids: [state_0000, state_0013, state_0026, state_0039, state_0052, state_0065, state_0078, state_0091, state_0104, state_0117, state_0130, state_0143, state_0156, state_0169, state_0182, state_0195, state_0208, state_0221, state_0234, state_0247, state_0260, state_0273, state_0286, state_0299]
+  old_validation_state_ids: [state_0300, state_0304, state_0307, state_0314, state_0321, state_0328, state_0335, state_0340, state_0342, state_0349, state_0356, state_0363, state_0370, state_0376, state_0377]
+cases:
+  - {state_id: state_0301, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j1-pos-1deg, offsets_rad: {joint1: 0.017453292519943295}}
+  - {state_id: state_0302, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j2-neg-1deg, offsets_rad: {joint2: -0.017453292519943295}}
+  - {state_id: state_0303, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j3-pos-1deg, offsets_rad: {joint3: 0.017453292519943295}}
+  - {state_id: state_0305, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j4-neg-1deg, offsets_rad: {joint4: -0.017453292519943295}}
+  - {state_id: state_0306, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j5-pos-1deg, offsets_rad: {joint5: 0.017453292519943295}}
+  - {state_id: state_0308, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j6-neg-1deg, offsets_rad: {joint6: -0.017453292519943295}}
+  - {state_id: state_0309, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j1-neg-1deg, offsets_rad: {joint1: -0.017453292519943295}}
+  - {state_id: state_0310, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j3-neg-1deg, offsets_rad: {joint3: -0.017453292519943295}}
+  - {state_id: state_0311, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j2-j4-1deg, offsets_rad: {joint2: 0.017453292519943295, joint4: -0.017453292519943295}}
+  - {state_id: state_0312, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 1.0, offset_name: j4-j6-1deg, offsets_rad: {joint4: 0.017453292519943295, joint6: -0.017453292519943295}}
+  - {state_id: state_0313, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j1-pos-2p5deg, offsets_rad: {joint1: 0.04363323129985824}}
+  - {state_id: state_0315, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j2-neg-2p5deg, offsets_rad: {joint2: -0.04363323129985824}}
+  - {state_id: state_0316, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j3-pos-2p5deg, offsets_rad: {joint3: 0.04363323129985824}}
+  - {state_id: state_0317, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j4-neg-2p5deg, offsets_rad: {joint4: -0.04363323129985824}}
+  - {state_id: state_0318, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j5-pos-2p5deg, offsets_rad: {joint5: 0.04363323129985824}}
+  - {state_id: state_0319, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j6-neg-2p5deg, offsets_rad: {joint6: -0.04363323129985824}}
+  - {state_id: state_0320, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j1-neg-2p5deg, offsets_rad: {joint1: -0.04363323129985824}}
+  - {state_id: state_0322, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j3-neg-2p5deg, offsets_rad: {joint3: -0.04363323129985824}}
+  - {state_id: state_0323, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j2-j4-2p5deg, offsets_rad: {joint2: 0.04363323129985824, joint4: -0.04363323129985824}}
+  - {state_id: state_0324, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 2.5, offset_name: j4-j6-2p5deg, offsets_rad: {joint4: 0.04363323129985824, joint6: -0.04363323129985824}}
+  - {state_id: state_0325, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j1-pos-5deg, offsets_rad: {joint1: 0.08726646259971647}}
+  - {state_id: state_0326, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j2-neg-5deg, offsets_rad: {joint2: -0.08726646259971647}}
+  - {state_id: state_0327, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j3-pos-5deg, offsets_rad: {joint3: 0.08726646259971647}}
+  - {state_id: state_0329, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j4-neg-5deg, offsets_rad: {joint4: -0.08726646259971647}}
+  - {state_id: state_0330, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j5-pos-5deg, offsets_rad: {joint5: 0.08726646259971647}}
+  - {state_id: state_0331, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j6-neg-5deg, offsets_rad: {joint6: -0.08726646259971647}}
+  - {state_id: state_0332, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j1-neg-5deg, offsets_rad: {joint1: -0.08726646259971647}}
+  - {state_id: state_0333, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j3-neg-5deg, offsets_rad: {joint3: -0.08726646259971647}}
+  - {state_id: state_0334, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j2-j4-5deg, offsets_rad: {joint2: 0.08726646259971647, joint4: -0.08726646259971647}}
+  - {state_id: state_0336, cameras: [head, extra], case_role: paired_controlled, magnitude_deg: 5.0, offset_name: j4-j6-5deg, offsets_rad: {joint4: 0.08726646259971647, joint6: -0.08726646259971647}}
+  - {state_id: state_0337, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-01, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0338, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-02, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0339, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-03, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0341, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-04, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0343, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-05, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0344, cameras: [head, extra], case_role: paired_zero, magnitude_deg: 0.0, offset_name: zero-06, offsets_rad: {joint2: 0.0, joint4: 0.0}}
+  - {state_id: state_0345, cameras: [head], case_role: head_stress, magnitude_deg: 2.5, offset_name: head-j1-pos-2p5deg, offsets_rad: {joint1: 0.04363323129985824}}
+  - {state_id: state_0346, cameras: [head], case_role: head_stress, magnitude_deg: 2.5, offset_name: head-j3-neg-2p5deg, offsets_rad: {joint3: -0.04363323129985824}}
+  - {state_id: state_0347, cameras: [head], case_role: head_stress, magnitude_deg: 2.5, offset_name: head-j5-pos-2p5deg, offsets_rad: {joint5: 0.04363323129985824}}
+  - {state_id: state_0348, cameras: [head], case_role: head_stress, magnitude_deg: 5.0, offset_name: head-j2-pos-5deg, offsets_rad: {joint2: 0.08726646259971647}}
+  - {state_id: state_0350, cameras: [head], case_role: head_stress, magnitude_deg: 5.0, offset_name: head-j4-neg-5deg, offsets_rad: {joint4: -0.08726646259971647}}
+  - {state_id: state_0351, cameras: [head], case_role: head_stress, magnitude_deg: 5.0, offset_name: head-j6-pos-5deg, offsets_rad: {joint6: 0.08726646259971647}}
+  - {state_id: state_0352, cameras: [extra], case_role: extra_stress, magnitude_deg: 2.5, offset_name: extra-j1-neg-2p5deg, offsets_rad: {joint1: -0.04363323129985824}}
+  - {state_id: state_0353, cameras: [extra], case_role: extra_stress, magnitude_deg: 2.5, offset_name: extra-j3-pos-2p5deg, offsets_rad: {joint3: 0.04363323129985824}}
+  - {state_id: state_0354, cameras: [extra], case_role: extra_stress, magnitude_deg: 2.5, offset_name: extra-j5-neg-2p5deg, offsets_rad: {joint5: -0.04363323129985824}}
+  - {state_id: state_0355, cameras: [extra], case_role: extra_stress, magnitude_deg: 5.0, offset_name: extra-j2-neg-5deg, offsets_rad: {joint2: -0.08726646259971647}}
+  - {state_id: state_0357, cameras: [extra], case_role: extra_stress, magnitude_deg: 5.0, offset_name: extra-j4-pos-5deg, offsets_rad: {joint4: 0.08726646259971647}}
+  - {state_id: state_0358, cameras: [extra], case_role: extra_stress, magnitude_deg: 5.0, offset_name: extra-j6-neg-5deg, offsets_rad: {joint6: -0.08726646259971647}}

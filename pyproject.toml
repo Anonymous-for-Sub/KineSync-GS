@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kinesync-gs"
+version = "0.1.0"
+description = "Verified visual state synchronization for articulated Gaussian robot twins"
+requires-python = ">=3.10"
+authors = [
+  {name = "Anonymous Authors"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+dependencies = [
+  "h5py>=3.10",
+  "mujoco>=3.5,<3.6",
+  "numpy>=1.26",
+  "opencv-python>=4.9",
+  "PyYAML>=6.0",
+  "torch>=2.5",
+]
+
+[project.urls]
+Homepage = "https://anonymous-for-sub.github.io/KineSync-GS/"
+Repository = "https://github.com/Anonymous-for-Sub/KineSync-GS"
+Paper = "https://anonymous-for-sub.github.io/KineSync-GS/static/paper/kinesync-gs.pdf"
+
+[project.optional-dependencies]
+hardware = [
+  "piper_sdk>=0.6.1,<0.7",
+  "pyrealsense2>=2.55",
+  "python-can>=4.0",
+]
+
+[project.scripts]
+kinesync-rt0 = "kinesync.cli.rt0_joint_offset:main"
+kinesync-rt1o = "kinesync.cli.rt1_real_observation:main"
+kinesync-rt2f = "kinesync.cli.rt2_factorize:main"
+kinesync-rt2e = "kinesync.cli.rt2_evaluate:main"
+kinesync-rt3c = "kinesync.cli.rt3_calibrate:main"
+kinesync-rt3e = "kinesync.cli.rt3_evaluate:main"
+kinesync-rt4e = "kinesync.cli.rt4_evaluate:main"
+kinesync-rt5o = "kinesync.cli.rt5_observation_audit:main"
+kinesync-rt6s = "kinesync.cli.rt6_sync_bridge:main"
+kinesync-rt6f = "kinesync.cli.rt6_formal:main"
+kinesync-rt7c = "kinesync.cli.rt7_calibrate:main"
+kinesync-rt7r = "kinesync.cli.rt7_replay:main"
+kinesync-rt8p = "kinesync.cli.rt8_offline_shadow:main"
+kinesync-rt9t = "kinesync.cli.rt9_temporal_bridge:main"
+kinesync-rt10p = "kinesync.cli.rt10_live_shadow_preflight:main"
+kinesync-rt10-capture-validate = "kinesync.cli.rt10_capture_validate:main"
+kinesync-rt10-discover = "kinesync.cli.rt10_hardware_discover:main"
+kinesync-rt10-live = "kinesync.cli.rt10_piper_d455_live:main"
+kinesync-rt10-bundle = "kinesync.cli.rt10_migration:bundle_main"
+kinesync-rt10-doctor = "kinesync.cli.rt10_migration:doctor_main"
+kinesync-rt10-verify-transfer = "kinesync.cli.rt10_migration:verify_main"
+kinesync-piper-openvla-audit = "kinesync.cli.piper_openvla_audit:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

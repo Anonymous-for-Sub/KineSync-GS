@@ -1,0 +1,25 @@
+command_mode: disabled
+mode: dual
+robot:
+  can_name: can0
+  max_gripper_stroke_mm: 70.0
+  finger_travel_m: 0.05
+cameras:
+  head_serial: REPLACE_WITH_HEAD_D455_SERIAL
+  auxiliary_serial: REPLACE_WITH_AUXILIARY_D455_SERIAL
+  width: 1280
+  height: 720
+  fps: 30
+capture:
+  packet_count: 120
+  packet_timeout_ms: 500
+  sample_count: 12
+  hardware_warmup_s: 2.0
+  feedback_ready_timeout_s: 5.0
+monitor:
+  max_head_auxiliary_skew_ms: 50
+  max_camera_state_skew_ms: 50
+guard:
+  path: configs/rt10_frozen_temporal_guard.json
+  sha256: 398bf0b06f3bdf54fa001e9b2b9edf66476a4b31918ad34649b707843f72b89d
+run_root: hardware-runs/rt10

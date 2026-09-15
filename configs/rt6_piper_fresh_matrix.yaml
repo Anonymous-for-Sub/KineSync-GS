@@ -1,0 +1,454 @@
+experiment: rt6_piper_fresh_matrix
+split: validation
+canonical_case_order: declared_cases
+matrix_contract:
+  trial_count: 32
+  unique_state_count: 16
+  max_trials_per_state: 2
+  cameras: [head, extra]
+  role_counts:
+    single_joint: 24
+    zero_control: 6
+    multi_joint_diagnostic: 2
+  single_joint_counts_deg:
+    2.5: 12
+    5.0: 12
+untouched_validation_state_ids:
+  - state_0359
+  - state_0361
+  - state_0362
+  - state_0364
+  - state_0365
+  - state_0366
+  - state_0367
+  - state_0368
+  - state_0369
+  - state_0371
+  - state_0372
+  - state_0373
+  - state_0374
+  - state_0375
+  - state_0378
+  - state_0379
+exclusion_provenance:
+  description: Exact state-ID union consumed by RT1--RT5, RT2 factor fitting, and RT3 calibration.
+  previously_used_state_ids:
+    - state_0000
+    - state_0001
+    - state_0002
+    - state_0003
+    - state_0004
+    - state_0005
+    - state_0006
+    - state_0007
+    - state_0008
+    - state_0009
+    - state_0010
+    - state_0011
+    - state_0012
+    - state_0013
+    - state_0014
+    - state_0015
+    - state_0016
+    - state_0017
+    - state_0018
+    - state_0019
+    - state_0020
+    - state_0021
+    - state_0022
+    - state_0023
+    - state_0024
+    - state_0025
+    - state_0026
+    - state_0027
+    - state_0028
+    - state_0029
+    - state_0030
+    - state_0031
+    - state_0032
+    - state_0033
+    - state_0034
+    - state_0035
+    - state_0036
+    - state_0037
+    - state_0038
+    - state_0039
+    - state_0040
+    - state_0041
+    - state_0042
+    - state_0043
+    - state_0052
+    - state_0065
+    - state_0078
+    - state_0091
+    - state_0100
+    - state_0104
+    - state_0117
+    - state_0130
+    - state_0143
+    - state_0156
+    - state_0169
+    - state_0182
+    - state_0195
+    - state_0199
+    - state_0208
+    - state_0221
+    - state_0234
+    - state_0247
+    - state_0260
+    - state_0273
+    - state_0286
+    - state_0299
+    - state_0300
+    - state_0301
+    - state_0302
+    - state_0303
+    - state_0304
+    - state_0305
+    - state_0306
+    - state_0307
+    - state_0308
+    - state_0309
+    - state_0310
+    - state_0311
+    - state_0312
+    - state_0313
+    - state_0314
+    - state_0315
+    - state_0316
+    - state_0317
+    - state_0318
+    - state_0319
+    - state_0320
+    - state_0321
+    - state_0322
+    - state_0323
+    - state_0324
+    - state_0325
+    - state_0326
+    - state_0327
+    - state_0328
+    - state_0329
+    - state_0330
+    - state_0331
+    - state_0332
+    - state_0333
+    - state_0334
+    - state_0335
+    - state_0336
+    - state_0337
+    - state_0338
+    - state_0339
+    - state_0340
+    - state_0341
+    - state_0342
+    - state_0343
+    - state_0344
+    - state_0345
+    - state_0346
+    - state_0347
+    - state_0348
+    - state_0349
+    - state_0350
+    - state_0351
+    - state_0352
+    - state_0353
+    - state_0354
+    - state_0355
+    - state_0356
+    - state_0357
+    - state_0358
+    - state_0360
+    - state_0363
+    - state_0370
+    - state_0376
+    - state_0377
+cases:
+  - case_id: controlled_2p5_joint1_pos
+    state_id: state_0359
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint1: 2.5}
+    offsets_rad: {joint1: 0.04363323129985824}
+    seed: 6101
+  - case_id: controlled_2p5_joint1_neg
+    state_id: state_0378
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint1: -2.5}
+    offsets_rad: {joint1: -0.04363323129985824}
+    seed: 6102
+  - case_id: controlled_2p5_joint2_pos
+    state_id: state_0361
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint2: 2.5}
+    offsets_rad: {joint2: 0.04363323129985824}
+    seed: 6103
+  - case_id: controlled_2p5_joint2_neg
+    state_id: state_0362
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint2: -2.5}
+    offsets_rad: {joint2: -0.04363323129985824}
+    seed: 6104
+  - case_id: controlled_2p5_joint3_pos
+    state_id: state_0364
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint3: 2.5}
+    offsets_rad: {joint3: 0.04363323129985824}
+    seed: 6105
+  - case_id: controlled_2p5_joint3_neg
+    state_id: state_0365
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint3: -2.5}
+    offsets_rad: {joint3: -0.04363323129985824}
+    seed: 6106
+  - case_id: controlled_2p5_joint4_pos
+    state_id: state_0366
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint4: 2.5}
+    offsets_rad: {joint4: 0.04363323129985824}
+    seed: 6107
+  - case_id: controlled_2p5_joint4_neg
+    state_id: state_0367
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint4: -2.5}
+    offsets_rad: {joint4: -0.04363323129985824}
+    seed: 6108
+  - case_id: controlled_2p5_joint5_pos
+    state_id: state_0368
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint5: 2.5}
+    offsets_rad: {joint5: 0.04363323129985824}
+    seed: 6109
+  - case_id: controlled_2p5_joint5_neg
+    state_id: state_0369
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint5: -2.5}
+    offsets_rad: {joint5: -0.04363323129985824}
+    seed: 6110
+  - case_id: controlled_2p5_joint6_pos
+    state_id: state_0371
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint6: 2.5}
+    offsets_rad: {joint6: 0.04363323129985824}
+    seed: 6111
+  - case_id: controlled_2p5_joint6_neg
+    state_id: state_0372
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 2.5
+    offsets_deg: {joint6: -2.5}
+    offsets_rad: {joint6: -0.04363323129985824}
+    seed: 6112
+  - case_id: controlled_5_joint4_pos
+    state_id: state_0359
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint4: 5.0}
+    offsets_rad: {joint4: 0.08726646259971647}
+    seed: 6201
+  - case_id: controlled_5_joint4_neg
+    state_id: state_0379
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint4: -5.0}
+    offsets_rad: {joint4: -0.08726646259971647}
+    seed: 6202
+  - case_id: controlled_5_joint5_pos
+    state_id: state_0361
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint5: 5.0}
+    offsets_rad: {joint5: 0.08726646259971647}
+    seed: 6203
+  - case_id: controlled_5_joint5_neg
+    state_id: state_0362
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint5: -5.0}
+    offsets_rad: {joint5: -0.08726646259971647}
+    seed: 6204
+  - case_id: controlled_5_joint6_pos
+    state_id: state_0364
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint6: 5.0}
+    offsets_rad: {joint6: 0.08726646259971647}
+    seed: 6205
+  - case_id: controlled_5_joint6_neg
+    state_id: state_0365
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint6: -5.0}
+    offsets_rad: {joint6: -0.08726646259971647}
+    seed: 6206
+  - case_id: controlled_5_joint1_pos
+    state_id: state_0366
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint1: 5.0}
+    offsets_rad: {joint1: 0.08726646259971647}
+    seed: 6207
+  - case_id: controlled_5_joint1_neg
+    state_id: state_0367
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint1: -5.0}
+    offsets_rad: {joint1: -0.08726646259971647}
+    seed: 6208
+  - case_id: controlled_5_joint2_pos
+    state_id: state_0368
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint2: 5.0}
+    offsets_rad: {joint2: 0.08726646259971647}
+    seed: 6209
+  - case_id: controlled_5_joint2_neg
+    state_id: state_0369
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint2: -5.0}
+    offsets_rad: {joint2: -0.08726646259971647}
+    seed: 6210
+  - case_id: controlled_5_joint3_pos
+    state_id: state_0371
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint3: 5.0}
+    offsets_rad: {joint3: 0.08726646259971647}
+    seed: 6211
+  - case_id: controlled_5_joint3_neg
+    state_id: state_0372
+    split: validation
+    cameras: [head, extra]
+    role: single_joint
+    magnitude_deg: 5.0
+    offsets_deg: {joint3: -5.0}
+    offsets_rad: {joint3: -0.08726646259971647}
+    seed: 6212
+  - case_id: zero_0373_seed_7001
+    state_id: state_0373
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint1: 0.0}
+    offsets_rad: {joint1: 0.0}
+    seed: 7001
+  - case_id: zero_0373_seed_7002
+    state_id: state_0373
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint2: 0.0}
+    offsets_rad: {joint2: 0.0}
+    seed: 7002
+  - case_id: zero_0374_seed_7003
+    state_id: state_0374
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint3: 0.0}
+    offsets_rad: {joint3: 0.0}
+    seed: 7003
+  - case_id: zero_0374_seed_7004
+    state_id: state_0374
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint4: 0.0}
+    offsets_rad: {joint4: 0.0}
+    seed: 7004
+  - case_id: zero_0375_seed_7005
+    state_id: state_0375
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint5: 0.0}
+    offsets_rad: {joint5: 0.0}
+    seed: 7005
+  - case_id: zero_0375_seed_7006
+    state_id: state_0375
+    split: validation
+    cameras: [head, extra]
+    role: zero_control
+    magnitude_deg: 0.0
+    offsets_deg: {joint6: 0.0}
+    offsets_rad: {joint6: 0.0}
+    seed: 7006
+  - case_id: diagnostic_multi_2p5
+    state_id: state_0378
+    split: validation
+    cameras: [head, extra]
+    role: multi_joint_diagnostic
+    magnitude_deg: 2.5
+    offsets_deg: {joint2: 2.5, joint4: -2.5}
+    offsets_rad: {joint2: 0.04363323129985824, joint4: -0.04363323129985824}
+    seed: 7301
+  - case_id: diagnostic_multi_5
+    state_id: state_0379
+    split: validation
+    cameras: [head, extra]
+    role: multi_joint_diagnostic
+    magnitude_deg: 5.0
+    offsets_deg: {joint2: 5.0, joint5: -5.0}
+    offsets_rad: {joint2: 0.08726646259971647, joint5: -0.08726646259971647}
+    seed: 7302

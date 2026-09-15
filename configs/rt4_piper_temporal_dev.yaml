@@ -1,0 +1,13 @@
+experiment: rt4_piper_temporal_development
+split: validation
+seed: 41
+source_matrix: rt3_piper_guard_test.yaml
+source_matrix_sha256: 2271b37803d2430b621d515e831a39c5490d3a1fa0d1401736a95d2a236c0ae4
+eligible_roles: [paired_controlled, paired_zero]
+window:
+  direction: causal
+  size: 5
+  minimum_center_state_id: state_0305
+expected_counts:
+  paired_controlled: 27
+  paired_zero: 6

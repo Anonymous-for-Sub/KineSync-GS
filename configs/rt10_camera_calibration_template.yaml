@@ -1,0 +1,38 @@
+schema: kinesync.rt10_camera_calibration.v1
+cameras:
+  head:
+    serial: UNSET
+    image_size: [UNSET, UNSET]
+    intrinsics: {fx: UNSET, fy: UNSET, cx: UNSET, cy: UNSET}
+    distortion: [UNSET, UNSET, UNSET, UNSET, UNSET]
+    base_to_camera:
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+    camera_to_base:
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+    calibrated_at_utc: UNSET
+    method: UNSET
+    source_images: UNSET
+  external:
+    serial: UNSET
+    image_size: [UNSET, UNSET]
+    intrinsics: {fx: UNSET, fy: UNSET, cx: UNSET, cy: UNSET}
+    distortion: [UNSET, UNSET, UNSET, UNSET, UNSET]
+    base_to_camera:
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+    camera_to_base:
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+      - [UNSET, UNSET, UNSET, UNSET]
+    calibrated_at_utc: UNSET
+    method: UNSET
+    source_images: UNSET

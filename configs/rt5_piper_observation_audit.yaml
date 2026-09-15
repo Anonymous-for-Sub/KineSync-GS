@@ -1,0 +1,22 @@
+experiment: rt5_piper_observation_audit
+split: validation
+seed: 41
+source_matrix: rt3_piper_guard_test.yaml
+source_matrix_sha256: 2271b37803d2430b621d515e831a39c5490d3a1fa0d1401736a95d2a236c0ae4
+selection:
+  controlled_magnitude_deg: 1.0
+  include_paired_zero: true
+expected_counts:
+  paired_one_degree: 10
+  paired_zero: 6
+methods:
+  standard_120:
+    image_size: [120, 160]
+    sdf_weight: 0.0
+  standard_240:
+    image_size: [240, 320]
+    sdf_weight: 0.0
+  tsdf_240:
+    image_size: [240, 320]
+    sdf_weight: 0.25
+    sdf_radii_px: [4.0, 12.0]

@@ -1,0 +1,18 @@
+schema: kinesync.rt10_capture_manifest.v1
+project: kinesync_gs
+stage: RT10-P
+operator_acknowledgement:
+  operator_id: UNSET
+  acknowledged_at_utc: UNSET
+robot_serial: UNSET
+camera_serials:
+  head: UNSET
+  external: UNSET
+host_clocks:
+  wall_utc: UNSET
+  monotonic_domain: UNSET
+session_id: UNSET
+session_root: UNSET
+schedule_sha256: UNSET
+calibration_sha256: UNSET
+slots: []
