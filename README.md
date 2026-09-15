@@ -14,22 +14,22 @@
 
 KineSync-GS keeps an articulated Gaussian twin synchronized with robot state
 without giving a visual estimator unconditional authority over that state. A
-Gaussian renderer or motion estimator first proposes a correction. Independent
-cross-view or temporal evidence then verifies the proposal, after which the
+Gaussian renderer or motion estimator first proposes a correction. Cross-view
+or motion evidence then verifies the proposal, after which the
 system either commits the complete whole-state update or preserves the incoming
 measurement.
 
 ```text
-proposal -> independent evidence -> verified update / measurement fallback
+proposal -> separate evidence -> verified update / measurement fallback
 ```
 
 ## What is included
 
 - Kinematically bound Gaussian observation models for articulated robots.
 - Bounded whole-state correction over coordinated robot joints.
-- Cross-view verification with atomic commit or measurement fallback.
+- Cross-view whole-state verification with verified commit or measurement fallback.
 - Motion-based camera/telemetry alignment and verified resampling.
-- Recorded-real Component-GS and Hybrid-GS replay adapters.
+- Real-world Component-GS and Hybrid-GS replay adapters.
 - Read-only PiPER and RealSense D455 discovery, capture, and synchronization.
 - Robot-independent state/action interfaces, including OpenVLA-OFT integration.
 - Reproducible run manifests, aggregate analysis, and visualization utilities.

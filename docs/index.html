@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="title" content="KineSync-GS: Verified Visual State Synchronization">
-  <meta name="description" content="KineSync-GS verifies spatial and temporal corrections before they update an articulated Gaussian robot twin.">
+  <meta name="description" content="KineSync-GS separates correction proposals from state-changing authority for articulated Gaussian robot twins.">
   <meta name="keywords" content="3D Gaussian Splatting, robot digital twin, state estimation, visual synchronization, real robot">
   <meta name="author" content="Anonymous Authors">
   <meta name="theme-color" content="#6B2717">
@@ -39,7 +39,7 @@
       <div class="hero-content">
         <p class="eyebrow">Verified visual state synchronization</p>
         <h1 id="hero-title">KineSync-GS</h1>
-        <p class="hero-subtitle">Rendering or motion proposes a correction. Independent evidence decides whether it may modify the articulated Gaussian twin.</p>
+        <p class="hero-subtitle">Rendering or motion proposes a correction. Cross-view or motion evidence determines whether it may modify the articulated Gaussian twin.</p>
         <p class="authors">Anonymous Authors</p>
         <div class="hero-actions">
           <a class="button primary" href="static/paper/kinesync-gs.pdf">Paper</a>
@@ -65,9 +65,9 @@
     <section class="section section-soft" id="thesis">
       <div class="container narrow">
         <h2>A better image fit is not automatically a better robot state.</h2>
-        <p class="lead">KineSync-GS separates state estimation from state-changing authority. A kinematically bound Gaussian renderer estimates a bounded whole-state correction; cross-view or temporal evidence verifies the proposal; unsupported updates fall back to the incoming measurement.</p>
+        <p class="lead">KineSync-GS separates state estimation from state-changing authority. A kinematically bound Gaussian renderer estimates a bounded whole-state correction; cross-view or motion evidence verifies the proposal; the interface then commits the verified update or preserves the incoming measurement.</p>
         <div class="principle" aria-label="KineSync-GS update principle">
-          <span>Proposal</span><b>→</b><span>Independent evidence</span><b>→</b><span>Verified update</span><b>/</b><span>Fallback</span>
+          <span>Proposal</span><b>→</b><span>Separate evidence</span><b>→</b><span>Verified update</span><b>/</b><span>Fallback</span>
         </div>
       </div>
     </section>
@@ -80,8 +80,8 @@
         </div>
         <div class="method-grid">
           <article class="method-card"><span class="step">01</span><h3>Bounded proposal</h3><p>Forward kinematics binds Gaussians to robot links. Multi-view inverse rendering or motion alignment estimates a coordinated correction within explicit bounds.</p></article>
-          <article class="method-card"><span class="step">02</span><h3>Independent evidence</h3><p>Cross-view support, visual gain, motion correlation, and state consistency determine whether the proposal represents the robot rather than one observation.</p></article>
-          <article class="method-card"><span class="step">03</span><h3>Atomic state update</h3><p>The complete proposal is committed only after verification. Otherwise the synchronized interface preserves the incoming state and records the decision.</p></article>
+          <article class="method-card"><span class="step">02</span><h3>Proposal evidence</h3><p>Cross-view support, visual gain, motion correlation, and state consistency determine whether the proposal supports a twin-level update.</p></article>
+          <article class="method-card"><span class="step">03</span><h3>Verified state update</h3><p>The complete proposal is committed after verification. The shared fallback preserves the incoming measurement and records the decision.</p></article>
         </div>
         <div class="artwork-grid" aria-label="Reserved architecture artwork positions">
           <figure class="artwork-slot artwork-wide"><div class="slot-canvas slot-wide"><span>System overview artwork</span></div><figcaption><b>Architecture A.</b> End-to-end KineSync-GS overview.</figcaption></figure>
@@ -91,9 +91,9 @@
             <h3>Shared output</h3>
             <dl class="architecture-notes">
               <dt>Architecture A · System flow</dt>
-              <dd>Asynchronous images and telemetry enter temporal association, bounded Gaussian recovery, independent evidence, and whole-state verification before one synchronized state is published.</dd>
+              <dd>Asynchronous images and telemetry enter temporal association, bounded Gaussian recovery, separate evidence, and whole-state verification before one synchronized state is published.</dd>
               <dt>Architecture B · Spatial path</dt>
-              <dd>Fixed kinematics, link-bound Gaussians, and calibrated cameras produce a fused proposal. Independent views decide whether the complete proposal replaces the measured state or the full measurement is retained.</dd>
+              <dd>Fixed kinematics, link-bound Gaussians, and calibrated cameras produce a fused proposal. View-specific estimates provide cross-view evidence for committing the complete proposal or retaining the measured state.</dd>
               <dt>Architecture C · Temporal path</dt>
               <dd>Image and telemetry motion features estimate lag after native-delay correction. Timing evidence then selects corrected resampling or preserves the original association.</dd>
             </dl>
@@ -106,7 +106,7 @@
       <div class="container">
         <div class="section-heading">
           <h2>State accuracy with selective updates</h2>
-          <p>Matched controlled, recorded-real, temporal, and online protocols evaluate both correction quality and the decisions that modify the twin.</p>
+          <p>Matched controlled, real-world, temporal, and online protocols evaluate both correction quality and the decisions that modify the twin.</p>
         </div>
         <div class="result-grid">
           <article class="result-card"><span class="result-label">Controlled Franka</span><strong>0.590° <i>→</i> 0.322°</strong><p>Whole-state qMAE over 48 held-out view and measurement conditions.</p></article>
@@ -118,11 +118,11 @@
           <figure class="media-card"><div class="image-well"><img src="static/images/spatial-results.png" alt="Controlled Franka and PiPER recovery comparison" loading="lazy"></div><figcaption><b>Fig. 2.</b> Spatial and temporal state recovery.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/update-behavior.png" alt="Helpful proposal utilization and harmful update comparison" loading="lazy"></div><figcaption><b>Fig. 3.</b> Helpful proposal use and harmful update suppression.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/geometry.png" alt="Distal-link Gaussian geometry comparison under a stale view" loading="lazy"></div><figcaption><b>Fig. 4.</b> Distal-link geometry under an inconsistent view.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/piper-alignment.png" alt="Measured and verified PiPER gripper regions and residuals" loading="lazy"></div><figcaption><b>Fig. 5.</b> Recorded-real PiPER alignment on matched states.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/piper-alignment.png" alt="Measured and verified PiPER gripper regions and residuals" loading="lazy"></div><figcaption><b>Fig. 5.</b> Real-world PiPER alignment on matched states.</figcaption></figure>
           <figure class="media-card media-wide"><div class="image-well"><img src="static/images/hero-real-task.png" alt="Corn-to-plate PiPER task across head and wrist views" loading="lazy"></div><figcaption><b>Fig. 6.</b> Corn-to-plate execution across synchronized head and wrist views.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/piper-cube.png" alt="Red-cube-to-plate PiPER task" loading="lazy"></div><figcaption><b>Fig. 7.</b> Red-cube-to-plate execution.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/piper-pen.png" alt="Red-pen-to-bucket PiPER task" loading="lazy"></div><figcaption><b>Fig. 8.</b> Red-pen-to-bucket execution.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/verified-workflow.png" alt="Proposal, evidence, and verified state workflow" loading="lazy"></div><figcaption><b>Fig. 1.</b> Independent evidence checks a proposal before state commit.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/verified-workflow.png" alt="Proposal, evidence, and verified state workflow" loading="lazy"></div><figcaption><b>Fig. 1.</b> Cross-view evidence verifies a proposal before state commit.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/abc-task.png" alt="ABC bimanual bottles-in-bin task" loading="lazy"></div><figcaption><b>Fig. 9.</b> ABC bottles-in-bin execution.</figcaption></figure>
           <figure class="media-card media-wide"><div class="franka-pair"><div class="image-well"><img src="static/images/franka-clean-diagnostic.png" alt="Measured and verified Franka states with wrist insets under clean observations" loading="lazy"></div><div class="image-well"><img src="static/images/franka-stale-diagnostic.png" alt="Franka diagnostics under a stale-view conflict" loading="lazy"></div></div><figcaption><b>Fig. 11.</b> Controlled Franka recovery under measurement offset (left) and stale-view conflict (right).</figcaption></figure>
         </div>
