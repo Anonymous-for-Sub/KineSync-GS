@@ -32,6 +32,9 @@ hardware = [
   "pyrealsense2>=2.55",
   "python-can>=4.0",
 ]
+media = [
+  "Pillow>=10.0",
+]
 
 [project.scripts]
 kinesync-rt0 = "kinesync.cli.rt0_joint_offset:main"
