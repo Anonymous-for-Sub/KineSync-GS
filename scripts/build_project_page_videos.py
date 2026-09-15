@@ -11,7 +11,7 @@ from pathlib import Path
 import cv2
 import h5py
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 
 WIDTH, HEIGHT = 1920, 1080
@@ -51,6 +51,22 @@ def _rounded_paste(
     mask = Image.new("L", (width, height), 0)
     ImageDraw.Draw(mask).rounded_rectangle((0, 0, width, height), radius=radius, fill=255)
     canvas.paste(image, box[:2], mask)
+
+
+def _trim_white(image: Image.Image, margin: int = 36) -> Image.Image:
+    rgb = image.convert("RGB")
+    difference = ImageChops.difference(rgb, Image.new("RGB", rgb.size, "white"))
+    difference = difference.convert("L").point(lambda value: 255 if value > 10 else 0)
+    bounds = difference.getbbox()
+    if bounds is None:
+        return rgb
+    left, top, right, bottom = bounds
+    return rgb.crop((max(0, left - margin), max(0, top - margin),
+                     min(rgb.width, right + margin), min(rgb.height, bottom + margin)))
+
+
+def _contain(image: Image.Image, width: int, height: int) -> Image.Image:
+    return ImageOps.contain(image.convert("RGB"), (width, height), Image.Resampling.LANCZOS)
 
 
 class _Writer:
@@ -223,6 +239,76 @@ def build_piper_task_video(
     writer.close()
 
 
+def build_franka_video(
+    source_root: Path,
+    destination: Path,
+    ffmpeg: Path,
+    regular_font: Path,
+    bold_font: Path,
+    fps: int = 12,
+) -> None:
+    poses = ("g", "h", "i")
+    measured = [
+        _trim_white(Image.open(source_root / f"F5__franka_{pose}__clean_nonzero__view_a__baseline__matched-crop__1440x1080.png"))
+        for pose in poses
+    ]
+    verified = [
+        _trim_white(Image.open(source_root / f"F5__franka_{pose}__clean_nonzero__view_a__ours__matched-crop__1440x1080.png"))
+        for pose in poses
+    ]
+    title_font = _font(bold_font, 50)
+    state_font = _font(bold_font, 34)
+    body_font = _font(regular_font, 29)
+    small_font = _font(regular_font, 24)
+    writer = _Writer(destination, fps, ffmpeg)
+    seconds_per_pose = 2.4
+    total_frames = round(len(poses) * seconds_per_pose * fps)
+
+    for frame_index in range(total_frames):
+        pose_index = min(len(poses) - 1, int(frame_index / (seconds_per_pose * fps)))
+        local_phase = (frame_index / fps - pose_index * seconds_per_pose) / seconds_per_pose
+        blend = min(1.0, max(0.0, (local_phase - 0.28) / 0.44))
+        left = _contain(measured[pose_index], 1260, 850)
+        right = _contain(verified[pose_index], 1260, 850)
+        viewport = Image.new("RGB", (1320, 900), "white")
+        measured_layer = Image.new("RGB", viewport.size, "white")
+        verified_layer = Image.new("RGB", viewport.size, "white")
+        measured_layer.paste(left, ((viewport.width - left.width) // 2, (viewport.height - left.height) // 2))
+        verified_layer.paste(right, ((viewport.width - right.width) // 2, (viewport.height - right.height) // 2))
+        viewport = Image.blend(measured_layer, verified_layer, blend)
+
+        canvas = Image.new("RGB", (WIDTH, HEIGHT), PAPER)
+        draw = ImageDraw.Draw(canvas)
+        draw.rounded_rectangle((26, 26, 1400, 1054), radius=20, fill="white", outline=DUN, width=3)
+        _rounded_paste(canvas, viewport, (52, 124, 1374, 1024), radius=14)
+        draw.text((58, 52), "Franka whole-state recovery", font=title_font, fill=BISTRE)
+        stage = "Verified state" if blend >= 0.5 else "Measured state"
+        stage_color = BISTRE if blend >= 0.5 else CADET
+        draw.rounded_rectangle((1070, 48, 1366, 103), radius=12, fill=stage_color)
+        stage_width = draw.textbbox((0, 0), stage, font=small_font)[2]
+        draw.text((1218 - stage_width // 2, 61), stage, font=small_font, fill=PAPER)
+
+        draw.rounded_rectangle((1422, 26, 1894, 1054), radius=20, fill="white", outline=DUN, width=3)
+        draw.text((1460, 70), f"Pose {poses[pose_index].upper()}", font=state_font, fill=SEAL)
+        draw.text((1460, 150), "Aggregate qMAE", font=body_font, fill=BISTRE)
+        draw.text((1460, 205), "0.590 deg", font=title_font, fill=CADET)
+        draw.text((1460, 280), "to", font=body_font, fill=GOLD)
+        draw.text((1460, 326), "0.322 deg", font=title_font, fill=SEAL)
+        draw.text((1460, 420), "Cross-view evidence", font=body_font, fill=BISTRE)
+        draw.text((1460, 468), "Atomic update", font=body_font, fill=BISTRE)
+
+        line_y = 828
+        draw.line((1484, line_y, 1830, line_y), fill=DUN, width=8)
+        for index, pose in enumerate(poses):
+            x = 1484 + index * 173
+            color = GOLD if index == pose_index else CADET
+            draw.ellipse((x - 12, line_y - 12, x + 12, line_y + 12), fill=color)
+            draw.text((x - 22, line_y + 28), pose.upper(), font=small_font, fill=BISTRE)
+        draw.text((1460, 925), "Measured  ->  verified", font=body_font, fill=SEAL)
+        writer.write(canvas)
+    writer.close()
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--temporal-first", type=Path, required=True)
@@ -234,6 +320,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--piper-corn-output", type=Path, required=True)
     parser.add_argument("--piper-cube-source", type=Path, required=True)
     parser.add_argument("--piper-cube-output", type=Path, required=True)
+    parser.add_argument("--franka-source-root", type=Path, required=True)
+    parser.add_argument("--franka-output", type=Path, required=True)
     parser.add_argument("--ffmpeg", type=Path, required=True)
     parser.add_argument("--regular-font", type=Path, required=True)
     parser.add_argument("--bold-font", type=Path, required=True)
@@ -252,6 +340,10 @@ def main() -> None:
     build_piper_task_video(
         args.piper_corn_source, args.piper_corn_output, "Corn to plate",
         args.ffmpeg, args.regular_font, args.bold_font,
+    )
+    build_franka_video(
+        args.franka_source_root, args.franka_output, args.ffmpeg,
+        args.regular_font, args.bold_font,
     )
     build_piper_task_video(
         args.piper_cube_source, args.piper_cube_output, "Red cube to plate",
