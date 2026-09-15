@@ -91,6 +91,7 @@ p:last-child { margin-bottom: 0; }
 .container.narrow { width: min(900px, 100%); }
 .lead { color: #403a35; font-size: 1.12rem; line-height: 1.75; }
 .section-heading { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.6fr); gap: 48px; align-items: end; margin-bottom: 30px; }
+.section-heading.single { display: block; }
 .section-heading p { margin-bottom: 4px; color: var(--muted); }
 
 .principle { margin-top: 28px; padding: 18px 20px; display: flex; flex-wrap: wrap; gap: 11px; align-items: center; justify-content: center; color: var(--seal); background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); font-size: 0.95rem; font-weight: 800; }
@@ -111,10 +112,11 @@ p:last-child { margin-bottom: 0; }
 .slot-square { aspect-ratio: 1 / 1; }
 .artwork-slot figcaption, .media-card figcaption { padding: 0 16px 14px; }
 .method-note { align-self: stretch; padding: 25px; display: flex; flex-direction: column; justify-content: center; }
+.method-note h3 { font-size: 1.2rem; }
 .architecture-notes { margin: 0; }
-.architecture-notes dt { margin-top: 15px; color: var(--seal); font-size: 0.84rem; font-weight: 800; }
+.architecture-notes dt { margin-top: 19px; color: var(--seal); font-size: 0.96rem; font-weight: 800; }
 .architecture-notes dt:first-child { margin-top: 0; }
-.architecture-notes dd { margin: 4px 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
+.architecture-notes dd { margin: 6px 0 0; color: var(--muted); font-size: 0.98rem; line-height: 1.66; }
 
 .result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
 .result-card { min-height: 172px; padding: 20px; }
@@ -132,6 +134,17 @@ p:last-child { margin-bottom: 0; }
 .franka-pair .image-well img { width: 100%; }
 figcaption { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
 
+.paper-table { width: 100%; margin: 0 0 26px; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: var(--shadow); }
+.paper-table:last-child { margin-bottom: 0; }
+.metric-table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: 0.9rem; line-height: 1.45; }
+.metric-table caption { padding: 15px 17px; color: var(--muted); background: var(--soft); border-bottom: 1px solid var(--line); font-weight: 600; text-align: left; }
+.metric-table th, .metric-table td { padding: 11px 13px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
+.metric-table th { color: var(--bistre); background: var(--dun); font-weight: 800; white-space: nowrap; }
+.metric-table tbody tr:last-child td { border-bottom: 0; }
+.metric-table tbody tr:hover { background: #fcf8f0; }
+.metric-table .highlight-row { background: var(--soft-gold); }
+.metric-table .highlight-cell { color: var(--seal); background: #f5ead8; }
+
 .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
 .video-card { overflow: hidden; padding-bottom: 18px; }
 .video-card video { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #111; }
@@ -142,7 +155,8 @@ figcaption { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
 .code h2 { color: #fff; }
 .code-layout { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 48px; align-items: center; }
 .code p { color: #d9cdc1; }
-.text-link { color: var(--gold); font-weight: 800; text-decoration: none; }
+.repository-button { display: inline-flex; align-items: center; min-height: 46px; margin-top: 8px; padding: 0 20px; color: var(--bistre); background: var(--gold); border: 1px solid var(--gold); border-radius: 999px; font-weight: 800; text-decoration: none; transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease; }
+.repository-button:hover, .repository-button:focus-visible { color: #fff; background: var(--seal); border-color: var(--seal); transform: translateY(-2px); }
 .code-stack { display: grid; gap: 14px; }
 pre { overflow-x: auto; margin: 0; padding: 21px; color: #f7f2ec; background: #281b14; border: 1px solid rgba(224,208,182,0.28); border-radius: var(--radius); font-family: inherit; font-size: 0.78rem; line-height: 1.6; }
 .citation-block { color: var(--bistre); background: var(--dun); border-color: rgba(224,208,182,0.7); }

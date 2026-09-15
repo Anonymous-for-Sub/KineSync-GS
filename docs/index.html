@@ -52,7 +52,7 @@
 
     <section class="section" id="videos">
       <div class="container">
-        <div class="section-heading"><h2>Synchronization in motion</h2><p>Selected 1080p media covers temporal alignment, articulated Gaussian recovery, real PiPER tasks, and external simulator compatibility.</p></div>
+        <div class="section-heading single"><h2>Synchronization in motion</h2></div>
         <div class="video-grid">
           <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/spatial-synchronization-poster.jpg"><source src="static/videos/spatial-synchronization.mp4" type="video/mp4"></video><h3>Video 1. Spatial synchronization</h3><p>Reference, measured state, Gaussian proposal, and verified output.</p></article>
           <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/piper-corn-to-plate-poster.jpg"><source src="static/videos/piper-corn-to-plate.mp4" type="video/mp4"></video><h3>Video 2. PiPER corn-to-plate</h3><p>Matched head and wrist streams from a real manipulation trajectory.</p></article>
@@ -63,9 +63,9 @@
     </section>
 
     <section class="section section-soft" id="thesis">
-      <div class="container narrow">
+      <div class="container">
         <h2>A better image fit is not automatically a better robot state.</h2>
-        <p class="lead">KineSync-GS separates state estimation from state-changing authority. A kinematically bound Gaussian renderer estimates a bounded whole-state correction; cross-view or motion evidence verifies the proposal; the interface then commits the verified update or preserves the incoming measurement.</p>
+        <p class="lead">Articulated Gaussian twins are useful only when rendered appearance remains aligned with the physical robot state. Under stale or conflicting views, inverse rendering can continue lowering image loss while moving the estimated joints farther from the robot. KineSync-GS therefore separates estimation from state-changing authority: rendering or motion produces a bounded correction proposal, cross-view or motion evidence evaluates it, and a shared interface either commits the verified whole-state update or preserves the measured state.</p>
         <div class="principle" aria-label="KineSync-GS update principle">
           <span>Proposal</span><b>→</b><span>Separate evidence</span><b>→</b><span>Verified update</span><b>/</b><span>Fallback</span>
         </div>
@@ -74,9 +74,8 @@
 
     <section class="section" id="method">
       <div class="container">
-        <div class="section-heading">
+        <div class="section-heading single">
           <h2>One synchronization contract</h2>
-          <p>Spatial rendering and temporal motion expose the same auditable interface to Gaussian twins, simulators, and downstream policies.</p>
         </div>
         <div class="method-grid">
           <article class="method-card"><span class="step">01</span><h3>Bounded proposal</h3><p>Forward kinematics binds Gaussians to robot links. Multi-view inverse rendering or motion alignment estimates a coordinated correction within explicit bounds.</p></article>
@@ -91,11 +90,11 @@
             <h3>Shared output</h3>
             <dl class="architecture-notes">
               <dt>Architecture A · System flow</dt>
-              <dd>Asynchronous images and telemetry enter temporal association, bounded Gaussian recovery, separate evidence, and whole-state verification before one synchronized state is published.</dd>
+              <dd>Asynchronous images and telemetry first enter temporal association, which estimates and verifies residual camera-to-state lag before producing a common timestamp. The aligned observations then drive bounded Gaussian state recovery. Cross-view evidence evaluates the fused whole-state proposal, and the shared interface publishes either a verified synchronized state or the preserved measurement.</dd>
               <dt>Architecture B · Spatial path</dt>
-              <dd>Fixed kinematics, link-bound Gaussians, and calibrated cameras produce a fused proposal. View-specific estimates provide cross-view evidence for committing the complete proposal or retaining the measured state.</dd>
+              <dd>Forward kinematics binds each Gaussian group to a robot link, so one articulated state drives geometry and appearance. Calibrated cameras recover a bounded fused proposal together with view-specific estimates. Visual gain and cross-view agreement determine whether the complete correction is committed as one coordinated state or the measured state is retained.</dd>
               <dt>Architecture C · Temporal path</dt>
-              <dd>Image and telemetry motion features estimate lag after native-delay correction. Timing evidence then selects corrected resampling or preserves the original association.</dd>
+              <dd>Image and telemetry motion features propose residual lag after native-delay correction. Calibrated peak support, alternative separation, motion variability, and correction magnitude verify whether resampling is justified. Accepted offsets produce a timestamp-aligned state stream; rejected offsets preserve the original association through the same fallback interface.</dd>
             </dl>
           </div>
         </div>
@@ -104,9 +103,8 @@
 
     <section class="section section-soft" id="results">
       <div class="container">
-        <div class="section-heading">
+        <div class="section-heading single">
           <h2>State accuracy with selective updates</h2>
-          <p>Matched controlled, real-world, temporal, and online protocols evaluate both correction quality and the decisions that modify the twin.</p>
         </div>
         <div class="result-grid">
           <article class="result-card"><span class="result-label">Controlled Franka</span><strong>0.590° <i>→</i> 0.322°</strong><p>Whole-state qMAE over 48 held-out view and measurement conditions.</p></article>
@@ -129,9 +127,48 @@
       </div>
     </section>
 
+    <section class="section" id="quantitative-results">
+      <div class="container">
+        <div class="section-heading single"><h2>Quantitative results</h2></div>
+        <div class="paper-table">
+          <table class="metric-table">
+            <caption>Table 1. Verified state synchronization across controlled, real-world, and temporal protocols.</caption>
+            <thead>
+              <tr><th>Evaluation</th><th>Method / state</th><th>qMAE ↓</th><th>Recovery ↑</th><th>Beneficial precision ↑</th><th>Verified-update evidence</th></tr>
+            </thead>
+            <tbody>
+              <tr><td rowspan="2">Franka · 48 held-out conditions</td><td>Measured state</td><td>0.590°</td><td>—</td><td>—</td><td>No proposed update</td></tr>
+              <tr class="highlight-row"><td><strong>KineSync-GS</strong></td><td><strong>0.322°</strong></td><td>—</td><td>12/12 useful retained</td><td><strong>0/48 harmful updates</strong></td></tr>
+              <tr><td rowspan="2">PiPER · Component-GS</td><td>Delayed state</td><td>84.06 mrad</td><td>35.91%</td><td>—</td><td>Incoming measurement</td></tr>
+              <tr class="highlight-row"><td><strong>Verified retrieval</strong></td><td><strong>2.26 mrad</strong></td><td><strong>94.67%</strong></td><td><strong>94.55%</strong></td><td>Whole-state commit / fallback</td></tr>
+              <tr><td rowspan="2">PiPER · Hybrid-GS</td><td>Delayed state</td><td>84.06 mrad</td><td>35.91%</td><td>—</td><td>Incoming measurement</td></tr>
+              <tr class="highlight-row"><td><strong>Verified retrieval</strong></td><td><strong>2.92 mrad</strong></td><td><strong>93.99%</strong></td><td><strong>95.03%</strong></td><td>Whole-state commit / fallback</td></tr>
+              <tr><td rowspan="2">Telemetry · 630 conditions</td><td>Raw linear</td><td>4.03 mrad</td><td>14.29%</td><td>—</td><td>Unverified association</td></tr>
+              <tr class="highlight-row"><td><strong>Verified alignment</strong></td><td><strong>2.47 mrad</strong></td><td><strong>39.09%</strong></td><td><strong>97.97%</strong></td><td>Verified resampling / fallback</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="paper-table">
+          <table class="metric-table">
+            <caption>Table 2. Online PiPER synchronization and same-policy manipulation over three real-robot tasks.</caption>
+            <thead>
+              <tr><th>Task</th><th>Raw qMAE ↓</th><th>KineSync-GS qMAE ↓</th><th>Recovery ↑</th><th>Harmful updates ↓</th><th>Raw-state success</th><th>KineSync-state success ↑</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Take-Pens</td><td>12.84 mrad</td><td><strong>3.46 mrad</strong></td><td>79.62%</td><td><strong>0.42%</strong></td><td>45.00% (18/40)</td><td class="highlight-cell"><strong>62.50% (25/40)</strong></td></tr>
+              <tr><td>Red-Cube-to-Plate</td><td>11.26 mrad</td><td><strong>2.94 mrad</strong></td><td>84.36%</td><td><strong>0.36%</strong></td><td>62.50% (25/40)</td><td class="highlight-cell"><strong>75.00% (30/40)</strong></td></tr>
+              <tr><td>Corn-to-Plate</td><td>10.92 mrad</td><td><strong>2.81 mrad</strong></td><td>85.18%</td><td><strong>0.31%</strong></td><td>67.50% (27/40)</td><td class="highlight-cell"><strong>77.50% (31/40)</strong></td></tr>
+              <tr class="highlight-row"><td><strong>Task macro</strong></td><td>11.67 mrad</td><td><strong>3.07 mrad</strong></td><td><strong>83.05%</strong></td><td><strong>0.36%</strong></td><td>58.33%</td><td><strong>71.67%</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <section class="section code" id="code">
       <div class="container code-layout">
-        <div><h2>Open-source release</h2><p>Estimators, verified updates, hardware adapters, evaluation tools, portable protocol definitions, and asset-independent tests are included in the anonymous repository.</p><a class="text-link" href="https://github.com/Anonymous-for-Sub/KineSync-GS">Browse the repository →</a></div>
+        <div><h2>Open-source release</h2><p>Estimators, verified updates, hardware adapters, evaluation tools, portable protocol definitions, and asset-independent tests are included in the anonymous repository.</p><a class="repository-button" href="https://github.com/Anonymous-for-Sub/KineSync-GS">Browse the repository →</a></div>
         <div class="code-stack">
           <pre><code>git clone git@github.com:Anonymous-for-Sub/KineSync-GS.git
 cd KineSync-GS
