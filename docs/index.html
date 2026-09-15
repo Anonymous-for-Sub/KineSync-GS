@@ -11,7 +11,7 @@
   <meta property="og:type" content="article">
   <meta property="og:title" content="KineSync-GS">
   <meta property="og:description" content="Verified visual state synchronization for articulated Gaussian twins.">
-  <meta property="og:image" content="static/images/franka-digital-twin-interface.png">
+  <meta property="og:image" content="static/images/franka-clean-diagnostic.png">
   <title>KineSync-GS | Project Page</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,8 +47,19 @@
           <a class="button secondary" href="#videos">Videos</a>
         </div>
       </div>
-      <span class="hero-media-caption">Video 1. Temporal synchronization across matched head and wrist streams.</span>
-      <a class="next-section" href="#thesis" aria-label="Continue to project summary">↓</a>
+      <a class="next-section" href="#videos" aria-label="Continue to project videos">↓</a>
+    </section>
+
+    <section class="section" id="videos">
+      <div class="container">
+        <div class="section-heading"><h2>Synchronization in motion</h2><p>Selected 1080p media covers temporal alignment, articulated Gaussian recovery, real PiPER tasks, and external simulator compatibility.</p></div>
+        <div class="video-grid">
+          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/spatial-synchronization-poster.jpg"><source src="static/videos/spatial-synchronization.mp4" type="video/mp4"></video><h3>Video 1. Spatial synchronization</h3><p>Reference, measured state, Gaussian proposal, and verified output.</p></article>
+          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/piper-corn-to-plate-poster.jpg"><source src="static/videos/piper-corn-to-plate.mp4" type="video/mp4"></video><h3>Video 2. PiPER corn-to-plate</h3><p>Matched head and wrist streams from a real manipulation trajectory.</p></article>
+          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/piper-red-cube-to-plate-poster.jpg"><source src="static/videos/piper-red-cube-to-plate.mp4" type="video/mp4"></video><h3>Video 3. PiPER red-cube-to-plate</h3><p>A second object and trajectory under the same synchronized interface.</p></article>
+          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/abc-bimanual-policy-poster.jpg"><source src="static/videos/abc-bimanual-policy.mp4" type="video/mp4"></video><h3>Video 4. ABC bimanual execution</h3><p>Native-policy bottles-in-bin execution through an external state adapter.</p></article>
+        </div>
+      </div>
     </section>
 
     <section class="section section-soft" id="thesis">
@@ -76,7 +87,17 @@
           <figure class="artwork-slot artwork-wide"><div class="slot-canvas slot-wide"><span>System overview artwork</span></div><figcaption><b>Architecture A.</b> End-to-end KineSync-GS overview.</figcaption></figure>
           <figure class="artwork-slot artwork-wide"><div class="slot-canvas slot-wide"><span>Spatial method artwork</span></div><figcaption><b>Architecture B.</b> Bounded Gaussian proposal and cross-view verification.</figcaption></figure>
           <figure class="artwork-slot artwork-single"><div class="slot-canvas slot-square"><span>Temporal method artwork</span></div><figcaption><b>Architecture C.</b> Motion alignment, verification, and state resampling.</figcaption></figure>
-          <div class="method-note"><h3>Shared output</h3><p>Both paths publish one timestamped, verified whole-state estimate. Robot-specific renderers and camera layouts remain behind adapters, while policies consume a stable state contract.</p></div>
+          <div class="method-note">
+            <h3>Shared output</h3>
+            <dl class="architecture-notes">
+              <dt>Architecture A · System flow</dt>
+              <dd>Asynchronous images and telemetry enter temporal association, bounded Gaussian recovery, independent evidence, and whole-state verification before one synchronized state is published.</dd>
+              <dt>Architecture B · Spatial path</dt>
+              <dd>Fixed kinematics, link-bound Gaussians, and calibrated cameras produce a fused proposal. Independent views decide whether the complete proposal replaces the measured state or the full measurement is retained.</dd>
+              <dt>Architecture C · Temporal path</dt>
+              <dd>Image and telemetry motion features estimate lag after native-delay correction. Timing evidence then selects corrected resampling or preserves the original association.</dd>
+            </dl>
+          </div>
         </div>
       </div>
     </section>
@@ -103,21 +124,7 @@
           <figure class="media-card"><div class="image-well"><img src="static/images/piper-pen.png" alt="Red-pen-to-bucket PiPER task" loading="lazy"></div><figcaption><b>Fig. 8.</b> Red-pen-to-bucket execution.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/verified-workflow.png" alt="Proposal, evidence, and verified state workflow" loading="lazy"></div><figcaption><b>Fig. 1.</b> Independent evidence checks a proposal before state commit.</figcaption></figure>
           <figure class="media-card"><div class="image-well"><img src="static/images/abc-task.png" alt="ABC bimanual bottles-in-bin task" loading="lazy"></div><figcaption><b>Fig. 9.</b> ABC bottles-in-bin execution.</figcaption></figure>
-          <figure class="media-card media-wide"><div class="image-well image-well-dark"><img src="static/images/franka-digital-twin-interface.png" alt="Schematic digital twin interface showing a complete Franka arm moving a red cube toward a target" loading="lazy"></div><figcaption><b>Fig. 10.</b> Digital-twin interface concept: a complete Franka manipulation state, trajectory, alternate view, and verified state readout.</figcaption></figure>
-          <figure class="media-card media-wide"><div class="image-well"><img src="static/images/franka-experiment-stages.png" alt="Measured and verified Franka Gaussian states for held-out poses G, H, and I" loading="lazy"></div><figcaption><b>Fig. 11.</b> Controlled Franka recovery on three held-out poses.</figcaption></figure>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="videos">
-      <div class="container">
-        <div class="section-heading"><h2>Synchronization in motion</h2><p>Selected 1080p media covers temporal alignment, articulated Gaussian recovery, real PiPER tasks, and external simulator compatibility.</p></div>
-        <div class="video-grid">
-          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/franka-whole-state-recovery-poster.jpg"><source src="static/videos/franka-whole-state-recovery.mp4" type="video/mp4"></video><h3>Video 2. Franka whole-state recovery</h3><p>Measured and verified Gaussian states across held-out articulated poses.</p></article>
-          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/spatial-synchronization-poster.jpg"><source src="static/videos/spatial-synchronization.mp4" type="video/mp4"></video><h3>Video 3. Spatial synchronization</h3><p>Reference, measured state, Gaussian proposal, and verified output.</p></article>
-          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/piper-corn-to-plate-poster.jpg"><source src="static/videos/piper-corn-to-plate.mp4" type="video/mp4"></video><h3>Video 4. PiPER corn-to-plate</h3><p>Matched head and wrist streams from a real manipulation trajectory.</p></article>
-          <article class="video-card"><video controls preload="metadata" playsinline poster="static/images/piper-red-cube-to-plate-poster.jpg"><source src="static/videos/piper-red-cube-to-plate.mp4" type="video/mp4"></video><h3>Video 5. PiPER red-cube-to-plate</h3><p>A second object and trajectory under the same synchronized interface.</p></article>
-          <article class="video-card video-wide"><video controls preload="metadata" playsinline poster="static/images/abc-bimanual-policy-poster.jpg"><source src="static/videos/abc-bimanual-policy.mp4" type="video/mp4"></video><h3>Video 6. ABC bimanual execution</h3><p>Native-policy bottles-in-bin execution through an external state adapter.</p></article>
+          <figure class="media-card media-wide"><div class="franka-pair"><div class="image-well"><img src="static/images/franka-clean-diagnostic.png" alt="Measured and verified Franka states with wrist insets under clean observations" loading="lazy"></div><div class="image-well"><img src="static/images/franka-stale-diagnostic.png" alt="Franka diagnostics under a stale-view conflict" loading="lazy"></div></div><figcaption><b>Fig. 11.</b> Controlled Franka recovery under measurement offset (left) and stale-view conflict (right).</figcaption></figure>
         </div>
       </div>
     </section>

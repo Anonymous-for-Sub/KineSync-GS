@@ -71,19 +71,19 @@ p:last-child { margin-bottom: 0; }
   width: min(var(--content), 90vw);
   margin: 0 auto;
   padding-top: 86px;
+  text-align: center;
   transform: translateY(-9vh);
 }
 .eyebrow { margin-bottom: 10px; color: var(--gold); font-size: 0.77rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
 .hero h1 { margin-bottom: 12px; font-size: clamp(3.9rem, 10vw, 8rem); }
-.hero-subtitle { max-width: 800px; margin-bottom: 18px; font-size: clamp(1.05rem, 2vw, 1.48rem); line-height: 1.5; }
+.hero-subtitle { max-width: 800px; margin: 0 auto 18px; font-size: clamp(1.05rem, 2vw, 1.48rem); line-height: 1.5; }
 .authors { margin-bottom: 22px; color: rgba(255,255,255,0.78); }
-.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .button { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 0 19px; border: 1px solid rgba(255,255,255,0.42); border-radius: 999px; font: inherit; font-size: 0.92rem; font-weight: 700; text-decoration: none; transition: transform 160ms ease, background 160ms ease; }
 .button.primary { color: var(--bistre); background: var(--gold); border-color: var(--gold); }
 .button.secondary { background: rgba(255,255,255,0.09); }
 .button:hover { transform: translateY(-1px); }
 .next-section { position: absolute; z-index: 3; right: max(4vw, calc((100vw - var(--content)) / 2)); bottom: 22px; width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,0.5); border-radius: 50%; text-decoration: none; }
-.hero-media-caption { position: absolute; z-index: 3; left: max(4vw, calc((100vw - var(--content)) / 2)); bottom: 24px; color: rgba(255,255,255,0.72); font-size: 0.78rem; }
 
 .section { padding: 76px 24px; scroll-margin-top: 60px; }
 .section-soft { background: var(--soft); }
@@ -111,6 +111,10 @@ p:last-child { margin-bottom: 0; }
 .slot-square { aspect-ratio: 1 / 1; }
 .artwork-slot figcaption, .media-card figcaption { padding: 0 16px 14px; }
 .method-note { align-self: stretch; padding: 25px; display: flex; flex-direction: column; justify-content: center; }
+.architecture-notes { margin: 0; }
+.architecture-notes dt { margin-top: 15px; color: var(--seal); font-size: 0.84rem; font-weight: 800; }
+.architecture-notes dt:first-child { margin-top: 0; }
+.architecture-notes dd { margin: 4px 0 0; color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
 
 .result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px; }
 .result-card { min-height: 172px; padding: 20px; }
@@ -122,8 +126,10 @@ p:last-child { margin-bottom: 0; }
 .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
 .media-wide { grid-column: 1 / -1; }
 .image-well { margin: 12px; padding: 10px; display: grid; place-items: center; background: #fff; border-radius: 8px; overflow: hidden; }
-.image-well-dark { background: #171310; }
 .image-well img { width: auto; max-width: 100%; height: auto; max-height: 590px; object-fit: contain; border-radius: 6px; }
+.franka-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 12px; }
+.franka-pair .image-well { margin: 0; padding: 8px; border: 1px solid var(--line); }
+.franka-pair .image-well img { width: 100%; }
 figcaption { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
 
 .video-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
@@ -131,7 +137,6 @@ figcaption { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
 .video-card video { width: 100%; aspect-ratio: 16 / 9; object-fit: contain; background: #111; }
 .video-card h3, .video-card p { margin-left: 18px; margin-right: 18px; }
 .video-card h3 { margin-top: 16px; }
-.video-wide { grid-column: 1 / -1; width: calc(50% - 11px); justify-self: center; }
 
 .code { color: #f7f2ec; background: var(--bistre); }
 .code h2 { color: #fff; }
@@ -161,9 +166,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
   .site-header nav a:last-child { display: inline; }
   .hero-content { padding-top: 72px; transform: translateY(-3vh); }
   .hero h1 { font-size: 3.45rem; }
-  .hero-media-caption { max-width: 72vw; }
-  .method-grid, .result-grid, .artwork-grid, .evidence-grid, .video-grid { grid-template-columns: 1fr; }
-  .artwork-wide, .artwork-single, .media-wide, .video-wide { grid-column: auto; width: 100%; }
+  .method-grid, .result-grid, .artwork-grid, .evidence-grid, .video-grid, .franka-pair { grid-template-columns: 1fr; }
+  .artwork-wide, .artwork-single, .media-wide { grid-column: auto; width: 100%; }
   .method-card { min-height: 0; }
   .principle { gap: 8px; font-size: 0.84rem; }
   footer { flex-direction: column; }

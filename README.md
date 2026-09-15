@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-MIT-E0D0B6?style=flat-square)](LICENSE)
 
 <p align="center">
-  <img src="docs/static/images/franka-digital-twin-interface.png" width="900" alt="KineSync-GS digital twin interface concept">
+  <img src="docs/static/images/franka-clean-diagnostic.png" width="900" alt="KineSync-GS controlled Franka recovery with wrist diagnostics">
 </p>
 
 KineSync-GS keeps an articulated Gaussian twin synchronized with robot state
