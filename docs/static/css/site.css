@@ -76,7 +76,8 @@ p:last-child { margin-bottom: 0; }
   transform: translateY(-9vh);
 }
 .eyebrow { margin-bottom: 15px; color: var(--gold); font-size: 0.77rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; }
-.hero h1 { margin-bottom: 18px; font-size: clamp(3.9rem, 10vw, 8rem); }
+.hero h1 { margin-bottom: 8px; font-size: clamp(3.9rem, 10vw, 8rem); }
+.method-expansion { margin: 0 auto 17px; color: var(--dun); font-size: clamp(0.92rem, 1.3vw, 1.12rem); font-weight: 600; }
 .hero-subtitle { max-width: 800px; margin: 0 auto 24px; font-size: clamp(1.05rem, 2vw, 1.48rem); line-height: 1.5; }
 .authors { margin-bottom: 28px; color: rgba(255,255,255,0.78); }
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
