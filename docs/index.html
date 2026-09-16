@@ -85,19 +85,25 @@
           <article class="method-card"><span class="step">02</span><h3>Proposal evidence</h3><p>Cross-view support, visual gain, motion correlation, and state consistency determine whether the proposal supports a twin-level update.</p></article>
           <article class="method-card"><span class="step">03</span><h3>Verified state update</h3><p>The complete proposal is committed after verification. The shared fallback preserves the incoming measurement and records the decision.</p></article>
         </div>
-        <div class="artwork-grid" aria-label="Reserved architecture artwork positions">
-          <figure class="artwork-slot artwork-wide"><div class="slot-canvas slot-wide"><span>System overview artwork</span></div><figcaption><b>Architecture A.</b> End-to-end KineSync-GS overview.</figcaption></figure>
-          <figure class="artwork-slot artwork-wide"><div class="slot-canvas slot-wide"><span>Spatial method artwork</span></div><figcaption><b>Architecture B.</b> Bounded Gaussian proposal and cross-view verification.</figcaption></figure>
-          <figure class="artwork-slot artwork-single"><div class="slot-canvas slot-square"><span>Temporal method artwork</span></div><figcaption><b>Architecture C.</b> Motion alignment, verification, and state resampling.</figcaption></figure>
-          <div class="method-note">
-            <h3>Shared output</h3>
+        <div class="artwork-grid" aria-label="KineSync-GS method figures">
+          <figure class="artwork-slot artwork-wide architecture-figure"><div class="architecture-canvas architecture-wide"><img src="static/images/architecture-overview.png" alt="KineSync-GS system overview from observations and telemetry to verified synchronized state" loading="lazy"></div><figcaption><b>Fig. 1.</b> End-to-end KineSync-GS system overview.</figcaption></figure>
+          <article class="method-note spatial-equations">
+            <h3>Spatial proposal and verification</h3>
+            <p>The articulated renderer first proposes one bounded, coordinated correction. Separately recovered view-specific estimates then provide the cross-view evidence that controls whether the complete state may modify the twin.</p>
+            <div class="equation-block"><i>q</i><sup>+</sup> = <i>q</i><sup>m</sup> + <i>S</i><sub>I</sub><i>b</i> tanh(<i>z</i>)</div>
+            <div class="equation-block"><i>e</i><sup>sp</sup> = (<i>r</i>, <i>g</i>, <i>a</i>, <i>d</i>)</div>
+            <div class="equation-block"><i>q</i><sup>s</sup> = <i>q</i><sup>+</sup> if <i>A</i><sub>τ</sub>(<i>e</i><sup>sp</sup>) = 1; otherwise <i>q</i><sup>m</sup></div>
+          </article>
+          <figure class="artwork-slot architecture-figure"><div class="architecture-canvas architecture-temporal"><img src="static/images/architecture-temporal.png" alt="Motion evidence for temporal offset verification and state resampling" loading="lazy"></div><figcaption><b>Fig. 3.</b> Motion alignment, timing verification, and state resampling.</figcaption></figure>
+          <div class="method-note shared-contract">
+            <h3>Shared synchronization contract</h3>
             <dl class="architecture-notes">
               <dt>Architecture A · System flow</dt>
               <dd>Asynchronous images and telemetry first enter temporal association, which estimates and verifies residual camera-to-state lag before producing a common timestamp. The aligned observations then drive bounded Gaussian state recovery. Cross-view evidence evaluates the fused whole-state proposal, and the shared interface publishes either a verified synchronized state or the preserved measurement.</dd>
-              <dt>Architecture B · Spatial path</dt>
-              <dd>Forward kinematics binds each Gaussian group to a robot link, so one articulated state drives geometry and appearance. Calibrated cameras recover a bounded fused proposal together with view-specific estimates. Visual gain and cross-view agreement determine whether the complete correction is committed as one coordinated state or the measured state is retained.</dd>
               <dt>Architecture C · Temporal path</dt>
               <dd>Image and telemetry motion features propose residual lag after native-delay correction. Calibrated peak support, alternative separation, motion variability, and correction magnitude verify whether resampling is justified. Accepted offsets produce a timestamp-aligned state stream; rejected offsets preserve the original association through the same fallback interface.</dd>
+              <dt>One published state</dt>
+              <dd>Both paths terminate at the same timestamped state contract. A supported proposal is committed atomically; unsupported evidence invokes measurement-preserving fallback. Rendering, simulators, and downstream policies therefore consume one synchronized state without embedding backend-specific decision logic.</dd>
             </dl>
           </div>
         </div>
@@ -116,16 +122,16 @@
           <article class="result-card"><span class="result-label">Same policy</span><strong>58.33% <i>→</i> 71.67%</strong><p>Task-macro success over 240 paired real-robot episodes.</p></article>
         </div>
         <div class="evidence-grid">
-          <figure class="media-card"><div class="image-well"><img src="static/images/spatial-results.png" alt="Controlled Franka and PiPER recovery comparison" loading="lazy"></div><figcaption><b>Fig. 2.</b> Spatial and temporal state recovery.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/update-behavior.png" alt="Helpful proposal utilization and harmful update comparison" loading="lazy"></div><figcaption><b>Fig. 3.</b> Helpful proposal use and harmful update suppression.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/geometry.png" alt="Distal-link Gaussian geometry comparison under a stale view" loading="lazy"></div><figcaption><b>Fig. 4.</b> Distal-link geometry under an inconsistent view.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/piper-alignment.png" alt="Measured and verified PiPER gripper regions and residuals" loading="lazy"></div><figcaption><b>Fig. 5.</b> Real-world PiPER alignment on matched states.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/spatial-results.png" alt="Controlled Franka and PiPER recovery comparison" loading="lazy"></div><figcaption><b>Fig. 8.</b> Spatial and temporal state recovery.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/update-behavior.png" alt="Helpful proposal utilization and harmful update comparison" loading="lazy"></div><figcaption><b>Fig. 9.</b> Helpful proposal use and harmful update suppression.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/geometry.png" alt="Distal-link Gaussian geometry comparison under a stale view" loading="lazy"></div><figcaption><b>Fig. 10.</b> Distal-link geometry under an inconsistent view.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/piper-alignment.png" alt="Measured and verified PiPER gripper regions and residuals" loading="lazy"></div><figcaption><b>Fig. 11.</b> Real-world PiPER alignment on matched states.</figcaption></figure>
           <figure class="media-card media-wide"><div class="image-well"><img src="static/images/hero-real-task.png" alt="Corn-to-plate PiPER task across head and wrist views" loading="lazy"></div><figcaption><b>Fig. 6.</b> Corn-to-plate execution across synchronized head and wrist views.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/piper-cube.png" alt="Red-cube-to-plate PiPER task" loading="lazy"></div><figcaption><b>Fig. 7.</b> Red-cube-to-plate execution.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/piper-pen.png" alt="Red-pen-to-bucket PiPER task" loading="lazy"></div><figcaption><b>Fig. 8.</b> Red-pen-to-bucket execution.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/verified-workflow.png" alt="Proposal, evidence, and verified state workflow" loading="lazy"></div><figcaption><b>Fig. 1.</b> Cross-view evidence verifies a proposal before state commit.</figcaption></figure>
-          <figure class="media-card"><div class="image-well"><img src="static/images/abc-task.png" alt="ABC bimanual bottles-in-bin task" loading="lazy"></div><figcaption><b>Fig. 9.</b> ABC bottles-in-bin execution.</figcaption></figure>
-          <figure class="media-card media-wide"><div class="franka-pair"><div class="image-well"><img src="static/images/franka-clean-diagnostic.png" alt="Measured and verified Franka states with wrist insets under clean observations" loading="lazy"></div><div class="image-well"><img src="static/images/franka-stale-diagnostic.png" alt="Franka diagnostics under a stale-view conflict" loading="lazy"></div></div><figcaption><b>Fig. 11.</b> Controlled Franka recovery under measurement offset (left) and stale-view conflict (right).</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/piper-cube.png" alt="Red-cube-to-plate PiPER task" loading="lazy"></div><figcaption><b>Fig. 7(a).</b> Red-cube-to-plate execution.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/piper-pen.png" alt="Red-pen-to-bucket PiPER task" loading="lazy"></div><figcaption><b>Fig. 7(b).</b> Red-pen-to-bucket execution.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/verified-workflow.png" alt="Proposal, evidence, and verified state workflow" loading="lazy"></div><figcaption><b>Fig. 12.</b> Cross-view evidence verifies a proposal before state commit.</figcaption></figure>
+          <figure class="media-card"><div class="image-well"><img src="static/images/abc-task.png" alt="ABC bimanual bottles-in-bin task" loading="lazy"></div><figcaption><b>Fig. 4.</b> ABC bottles-in-bin execution.</figcaption></figure>
+          <figure class="media-card media-wide"><div class="franka-pair"><div class="image-well"><img src="static/images/franka-clean-diagnostic.png" alt="Measured and verified Franka states with wrist insets under clean observations" loading="lazy"></div><div class="image-well"><img src="static/images/franka-stale-diagnostic.png" alt="Franka diagnostics under a stale-view conflict" loading="lazy"></div></div><figcaption><b>Fig. 5.</b> Controlled Franka recovery under measurement offset (left) and stale-view conflict (right).</figcaption></figure>
         </div>
       </div>
     </section>

@@ -107,13 +107,17 @@ p:last-child { margin-bottom: 0; }
 
 .artwork-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 32px; }
 .artwork-wide { grid-column: 1 / -1; }
-.artwork-single { grid-column: 1; }
-.slot-canvas { margin: 12px; display: grid; place-items: center; color: #8a7e75; background: var(--soft); border: 1px dashed var(--dun); border-radius: 8px; font-size: 0.82rem; font-weight: 700; }
-.slot-wide { aspect-ratio: 16 / 9; }
-.slot-square { aspect-ratio: 1 / 1; }
+.architecture-canvas { margin: 12px; padding: 8px; display: grid; place-items: center; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.architecture-canvas img { width: 100%; height: 100%; object-fit: contain; }
+.architecture-wide { aspect-ratio: 16 / 9; }
+.architecture-temporal { aspect-ratio: 16 / 9; }
 .artwork-slot figcaption, .media-card figcaption { padding: 0 16px 14px; }
 .method-note { align-self: stretch; padding: 25px; display: flex; flex-direction: column; justify-content: center; }
 .method-note h3 { font-size: 1.2rem; }
+.spatial-equations { justify-content: flex-start; }
+.spatial-equations p { font-size: 0.96rem; line-height: 1.62; }
+.equation-block { margin-top: 11px; padding: 11px 13px; overflow-x: auto; color: var(--bistre); background: var(--soft-gold); border-left: 3px solid var(--gold); border-radius: 6px; font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; line-height: 1.45; }
+.shared-contract { grid-column: 1 / -1; }
 .architecture-notes { margin: 0; }
 .architecture-notes dt { margin-top: 19px; color: var(--seal); font-size: 0.96rem; font-weight: 800; }
 .architecture-notes dt:first-child { margin-top: 0; }
@@ -182,7 +186,7 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px
   .hero-content { padding-top: 72px; transform: translateY(-3vh); }
   .hero h1 { font-size: 3.45rem; }
   .method-grid, .result-grid, .artwork-grid, .evidence-grid, .video-grid, .franka-pair { grid-template-columns: 1fr; }
-  .artwork-wide, .artwork-single, .media-wide { grid-column: auto; width: 100%; }
+  .artwork-wide, .shared-contract, .media-wide { grid-column: auto; width: 100%; }
   .method-card { min-height: 0; }
   .principle { gap: 8px; font-size: 0.84rem; }
   footer { flex-direction: column; }
