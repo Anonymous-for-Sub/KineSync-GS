@@ -92,7 +92,10 @@
             <p>The articulated renderer first proposes one bounded, coordinated correction. Separately recovered view-specific estimates then provide the cross-view evidence that controls whether the complete state may modify the twin.</p>
             <div class="equation-block"><i>q</i><sup>+</sup> = <i>q</i><sup>m</sup> + <i>S</i><sub>I</sub><i>b</i> tanh(<i>z</i>)</div>
             <div class="equation-block"><i>e</i><sup>sp</sup> = (<i>r</i>, <i>g</i>, <i>a</i>, <i>d</i>)</div>
+            <p class="evidence-definition"><i>r</i> measures normalized visual gain, <i>g</i> compares per-view gradients, <i>a</i> compares correction directions, and <i>d</i> limits normalized state disagreement. The thresholds <i>τ</i> are fixed after development.</p>
             <div class="equation-block"><i>q</i><sup>s</sup> = <i>q</i><sup>+</sup> if <i>A</i><sub>τ</sub>(<i>e</i><sup>sp</sup>) = 1; otherwise <i>q</i><sup>m</sup></div>
+            <div class="equation-block">‖<i>q</i><sup>s</sup> − <i>q</i><sup>m</sup>‖<sub>∞</sub> ≤ <i>b</i></div>
+            <p class="spatial-outcome">Acceptance commits the fused joint vector atomically; rejection preserves the incoming measurement exactly. Appearance fitting therefore proposes the correction, while cross-view evidence retains state-changing authority.</p>
           </article>
           <figure class="artwork-slot architecture-figure"><div class="architecture-canvas architecture-temporal"><img src="static/images/architecture-temporal.png" alt="Motion evidence for temporal offset verification and state resampling" loading="lazy"></div><figcaption><b>Fig. 3.</b> Motion alignment, timing verification, and state resampling.</figcaption></figure>
           <div class="method-note shared-contract">

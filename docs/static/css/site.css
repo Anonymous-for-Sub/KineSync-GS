@@ -116,6 +116,8 @@ p:last-child { margin-bottom: 0; }
 .method-note h3 { font-size: 1.2rem; }
 .spatial-equations { justify-content: flex-start; }
 .spatial-equations p { font-size: 0.96rem; line-height: 1.62; }
+.spatial-equations .evidence-definition { margin-top: 14px; }
+.spatial-equations .spatial-outcome { margin-top: 14px; margin-bottom: 0; }
 .equation-block { margin-top: 11px; padding: 11px 13px; overflow-x: auto; color: var(--bistre); background: var(--soft-gold); border-left: 3px solid var(--gold); border-radius: 6px; font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; line-height: 1.45; }
 .shared-contract { grid-column: 1 / -1; }
 .architecture-notes { margin: 0; }
