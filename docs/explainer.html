@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A 150-second interactive tour of KineSync-GS verified visual state synchronization.">
+  <meta name="description" content="A 150-second interactive animation of KineSync-GS verified visual state synchronization.">
   <meta name="theme-color" content="#442C1B">
   <meta property="og:title" content="Inside KineSync-GS">
-  <meta property="og:description" content="Follow a measured robot state through proposal, evidence, verified update, and fallback.">
+  <meta property="og:description" content="Follow a robot state through bounded recovery, evidence, verified update, and fallback.">
   <meta property="og:image" content="static/images/architecture-overview.png">
   <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="static/images/favicon-192.png">
@@ -14,84 +14,76 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/explainer.css">
-  <script defer src="static/js/explainer.js"></script>
+  <script type="module" src="static/js/explainer.js"></script>
   <title>Inside KineSync-GS · Interactive Demo</title>
 </head>
 <body>
-  <a class="skip-link" href="#stage">Skip to demonstration</a>
+  <a class="skip-link" href="#animation-stage">Skip to the animation</a>
   <header class="demo-header">
     <a class="demo-brand" href="index.html"><img src="static/images/kinesync-gs-logo.png" alt="">KineSync-GS</a>
-    <div class="header-copy"><strong>Interactive method demo</strong><span>150-second silent tour · narration-ready</span></div>
+    <div class="header-copy"><strong>Interactive method animation</strong><span>150 seconds · narration-ready</span></div>
     <nav aria-label="Demo resources"><a href="index.html">Project</a><a href="static/paper/kinesync-gs.pdf">Paper</a><a href="https://github.com/Anonymous-for-Sub/KineSync-GS">Code</a></nav>
   </header>
 
   <main id="explainer" class="explainer" aria-busy="true">
     <section class="tour-summary" aria-live="polite">
-      <div><span id="scene-kicker">Loading</span><h1 id="scene-title">Preparing the KineSync-GS tour</h1></div>
+      <div><span id="scene-kicker">Loading</span><h1 id="scene-title">Preparing the KineSync-GS animation</h1></div>
       <div class="tour-status"><span id="scene-count">01 / 11</span><span id="mode-label">Silent tour</span></div>
     </section>
 
-    <div id="demo-shell" class="demo-shell">
-      <aside class="chapter-panel" aria-label="Tour chapters">
-        <p class="panel-label">Chapters</p>
-        <div id="chapter-list" class="chapter-list"></div>
-      </aside>
+    <section id="demo-shell" class="demo-shell">
+      <nav id="chapter-list" class="chapter-list" aria-label="Animation chapters"></nav>
 
-      <section id="stage" class="stage" aria-label="KineSync-GS animated demonstration">
-        <div class="state-rail" aria-label="Shared synchronization contract">
-          <div class="rail-node" data-step="measurement"><span>01</span><b>Measurement</b></div>
-          <i aria-hidden="true"></i>
-          <div class="rail-node" data-step="proposal"><span>02</span><b>Proposal</b></div>
-          <i aria-hidden="true"></i>
-          <div class="rail-node" data-step="evidence"><span>03</span><b>Evidence</b></div>
-          <i aria-hidden="true"></i>
-          <div class="rail-node" data-step="output"><span>04</span><b>Verified state</b></div>
-          <div id="state-packet" class="state-packet" aria-hidden="true"></div>
-        </div>
+      <div class="stage-layout">
+        <section class="stage" aria-label="KineSync-GS animated method demonstration">
+          <div class="state-rail" aria-label="Shared synchronization contract">
+            <div class="rail-node" data-step="measurement"><span>01</span><b>Measurement</b></div><i aria-hidden="true"></i>
+            <div class="rail-node" data-step="proposal"><span>02</span><b>Proposal</b></div><i aria-hidden="true"></i>
+            <div class="rail-node" data-step="evidence"><span>03</span><b>Evidence</b></div><i aria-hidden="true"></i>
+            <div class="rail-node" data-step="output"><span>04</span><b>Verified state</b></div>
+            <div id="state-packet" class="state-packet" aria-hidden="true"></div>
+          </div>
 
-        <div id="scene-canvas" class="scene-canvas">
-          <div id="media-frame" class="media-frame"></div>
-          <div id="computed-layer" class="computed-layer" aria-hidden="true"></div>
-          <div class="scene-stamp"><span id="evidence-kind">Recorded evidence</span><b id="scene-metric">—</b></div>
-        </div>
+          <div class="animation-viewport">
+            <svg id="animation-stage" viewBox="0 0 960 520" role="img" aria-labelledby="scene-title animation-description"></svg>
+            <p id="animation-description" class="sr-only"></p>
+            <aside id="evidence-window" class="evidence-window" hidden>
+              <div class="evidence-heading"><span id="evidence-label">Recorded evidence</span><b id="evidence-counter"></b></div>
+              <div id="evidence-media" class="evidence-media"></div>
+            </aside>
+            <div class="scene-stamp"><span id="evidence-kind">Method animation</span><b id="scene-metric">—</b></div>
+          </div>
 
-        <div class="caption-panel" aria-live="polite">
-          <p id="caption-en" lang="en"></p>
-          <p id="caption-zh" lang="zh-CN"></p>
-        </div>
-      </section>
+          <div class="caption-panel" aria-live="polite"><p id="caption-en"></p></div>
+        </section>
 
-      <aside class="inspector" aria-label="Current scene details">
-        <p class="panel-label">What changes</p>
-        <h2 id="inspector-title">State synchronization</h2>
-        <p id="inspector-detail"></p>
-        <div id="inspector-flow" class="inspector-flow"></div>
-        <div class="readout">
-          <span>Tracked object</span>
-          <strong id="tracked-object">Measured state qᵐ</strong>
-        </div>
-        <div class="readout">
-          <span>Decision</span>
-          <strong id="decision-readout">Waiting for evidence</strong>
-        </div>
-        <div class="legend"><span><i class="proposal-dot"></i>Proposal</span><span><i class="accept-dot"></i>Supported</span><span><i class="fallback-dot"></i>Fallback</span></div>
-      </aside>
+        <aside class="inspector" aria-label="Current computation">
+          <p class="panel-label">Current computation</p>
+          <h2 id="inspector-title">State synchronization</h2>
+          <p id="inspector-detail"></p>
+          <div id="detail-formula" class="detail-formula"></div>
+          <div id="inspector-flow" class="inspector-flow"></div>
+          <div class="readout"><span>Tracked object</span><strong id="tracked-object">Measured state qᵐ</strong></div>
+          <div class="readout"><span>Decision</span><strong id="decision-readout">Waiting for evidence</strong></div>
+          <div id="live-readouts" class="live-readouts"></div>
+          <div class="legend"><span><i class="measurement-dot"></i>Measurement</span><span><i class="proposal-dot"></i>Proposal</span><span><i class="accept-dot"></i>Verified</span><span><i class="fallback-dot"></i>Fallback</span></div>
+        </aside>
+      </div>
 
       <div class="controls" aria-label="Tour playback controls">
-        <button id="previous" class="icon-button" type="button" title="Previous chapter" aria-label="Previous chapter">‹</button>
+        <button id="previous" class="icon-button" type="button" title="Previous chapter" aria-label="Previous chapter">←</button>
         <button id="play" class="play-button" type="button"><span aria-hidden="true">▶</span><b>Play tour</b></button>
-        <button id="next" class="icon-button" type="button" title="Next chapter" aria-label="Next chapter">›</button>
+        <button id="next" class="icon-button" type="button" title="Next chapter" aria-label="Next chapter">→</button>
         <span id="current-time" class="time">00:00</span>
-        <div class="timeline-wrap"><input id="timeline" type="range" min="0" max="150" value="0" step="0.05" aria-label="Tour timeline"><div id="timeline-markers" class="timeline-markers" aria-hidden="true"></div></div>
+        <div class="timeline-wrap"><input id="timeline" type="range" min="0" max="150" value="0" step="0.02" aria-label="Tour timeline"><div id="timeline-markers" class="timeline-markers" aria-hidden="true"></div></div>
         <span class="time">02:30</span>
-        <button id="language" class="text-button" type="button" title="Subtitle language">EN + 中文</button>
         <button id="audio" class="icon-button" type="button" disabled title="Narration will be synchronized after the recording is supplied" aria-label="Narration unavailable">♪</button>
         <button id="fullscreen" class="icon-button" type="button" title="Fullscreen" aria-label="Fullscreen">⛶</button>
         <button id="restart" class="icon-button" type="button" title="Restart tour" aria-label="Restart tour">↻</button>
       </div>
-    </div>
+    </section>
   </main>
 
-  <noscript>This interactive demonstration requires JavaScript.</noscript>
+  <noscript>This interactive animation requires JavaScript.</noscript>
 </body>
 </html>

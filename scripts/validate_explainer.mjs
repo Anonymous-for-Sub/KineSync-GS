@@ -7,7 +7,7 @@ const manifestPath = path.join(root, "static/data/explainer-timeline.json");
 const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
 
 const errors = [];
-const required = ["id", "start", "end", "title", "shortTitle", "type", "media", "metric", "detail", "caption"];
+const required = ["id", "start", "end", "title", "shortTitle", "kicker", "metric", "detail", "formula", "caption"];
 
 if (!Array.isArray(manifest.scenes) || manifest.scenes.length === 0) errors.push("timeline has no scenes");
 if (manifest.audio !== null) errors.push("audio must remain null until the supplied recording is measured");
@@ -19,11 +19,11 @@ for (const [index, scene] of manifest.scenes.entries()) {
   if (scene.start !== cursor) errors.push(`scene ${scene.id} starts at ${scene.start}, expected ${cursor}`);
   if (!(scene.end > scene.start)) errors.push(`scene ${scene.id} has invalid bounds`);
   cursor = scene.end;
-  if (!scene.caption?.en || !scene.caption?.zh) errors.push(`scene ${scene.id} lacks bilingual subtitles`);
-  for (const field of ["media", "poster", "secondary"]) {
-    if (!scene[field]) continue;
-    const file = path.join(root, scene[field]);
-    try { await access(file); } catch { errors.push(`scene ${scene.id} references missing ${field}: ${scene[field]}`); }
+  if (typeof scene.caption !== "string" || !scene.caption.trim()) errors.push(`scene ${scene.id} lacks an English subtitle`);
+  for (const field of ["media", "poster"]) {
+    if (!scene.evidence?.[field]) continue;
+    const file = path.join(root, scene.evidence[field]);
+    try { await access(file); } catch { errors.push(`scene ${scene.id} references missing evidence ${field}: ${scene.evidence[field]}`); }
   }
 }
 
@@ -35,9 +35,13 @@ for (const asset of ["static/css/explainer.css", "static/js/explainer.js", "stat
   if (asset !== "static/data/explainer-timeline.json" && !html.includes(asset)) errors.push(`explainer.html does not load ${asset}`);
 }
 
+const narration = await readFile(path.join(root, "NARRATION.md"), "utf8");
+const englishOnlySurface = `${html}\n${JSON.stringify(manifest)}\n${narration}`;
+if (/[\u4e00-\u9fff]/u.test(englishOnlySurface)) errors.push("the public animation or narration handoff contains Chinese text");
+
 if (errors.length) {
   console.error(errors.map((error) => `ERROR: ${error}`).join("\n"));
   process.exit(1);
 }
 
-console.log(`OK: ${manifest.scenes.length} contiguous scenes cover ${manifest.duration} seconds with bilingual subtitles and valid media paths.`);
+console.log(`OK: ${manifest.scenes.length} contiguous scenes cover ${manifest.duration} seconds with English subtitles and valid media paths.`);

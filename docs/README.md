@@ -3,7 +3,7 @@
 This directory is a zero-build GitHub Pages site.
 
 - `index.html`: main project page.
-- `explainer.html`: 150-second interactive method demonstration with arbitrary seeking, chapter navigation, bilingual subtitles, and narration-ready timing.
+- `explainer.html`: 150-second interactive method animation with arbitrary seeking, chapter navigation, English subtitles, and narration-ready timing.
 - `static/data/explainer-timeline.json`: single source of truth for scene boundaries, media, metrics, and subtitles.
 - `NARRATION.md`: recording script and audio handoff contract.
 
