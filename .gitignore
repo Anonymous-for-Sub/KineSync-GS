@@ -9,6 +9,8 @@ dist/
 runs/
 hardware-runs/
 data/
+!docs/static/data/
+!docs/static/data/explainer-timeline.json
 assets/
 configs/local*.yaml
 configs/local*.yml
