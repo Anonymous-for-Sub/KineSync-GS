@@ -3,7 +3,7 @@
 This directory is a zero-build GitHub Pages site.
 
 - `index.html`: main project page.
-- `explainer.html`: 150-second interactive method animation with arbitrary seeking, chapter navigation, English subtitles, and narration-ready timing.
+- `explainer.html`: narrated method animation with an audio-driven timeline, sentence captions, computed cross-view verification, interactive lag search, and recorded evidence insets. See `NARRATION.md` for recording status and measured duration.
 - `static/data/explainer-timeline.json`: single source of truth for scene boundaries, media, metrics, and subtitles.
 - `NARRATION.md`: recording script and audio handoff contract.
 

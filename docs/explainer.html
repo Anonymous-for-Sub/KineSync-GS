@@ -3,87 +3,49 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A 150-second interactive animation of KineSync-GS verified visual state synchronization.">
-  <meta name="theme-color" content="#442C1B">
-  <meta property="og:title" content="Inside KineSync-GS">
-  <meta property="og:description" content="Follow a robot state through bounded recovery, evidence, verified update, and fallback.">
-  <meta property="og:image" content="static/images/architecture-overview.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="static/images/favicon-32.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="static/images/favicon-192.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/explainer.css">
-  <script type="module" src="static/js/explainer.js"></script>
-  <title>Inside KineSync-GS · Interactive Demo</title>
+  <meta name="theme-color" content="#6b2717">
+  <meta name="description" content="An animated, narrated explanation of KineSync-GS: from a proposed correction to a verified robot state.">
+  <title>KineSync-GS | The narrated method</title>
+  <link rel="icon" href="static/images/favicon-32.png">
+  <link rel="stylesheet" href="static/css/explainer.css?v=3">
+  <script type="module" src="static/js/tour-player.mjs?v=3"></script>
 </head>
 <body>
-  <a class="skip-link" href="#animation-stage">Skip to the animation</a>
-  <header class="demo-header">
-    <a class="demo-brand" href="index.html"><img src="static/images/kinesync-gs-logo.png" alt="">KineSync-GS</a>
-    <div class="header-copy"><strong>Interactive method animation</strong><span>150 seconds · narration-ready</span></div>
-    <nav aria-label="Demo resources"><a href="index.html">Project</a><a href="static/paper/kinesync-gs.pdf">Paper</a><a href="https://github.com/Anonymous-for-Sub/KineSync-GS">Code</a></nav>
+  <header class="sitebar">
+    <a class="brand" href="index.html"><img src="static/images/kinesync-gs-logo.png" alt="">KineSync-GS</a>
+    <span class="edition">THE NARRATED METHOD</span>
+    <nav><a href="index.html">Project</a><a href="static/paper/kinesync-gs.pdf">Paper <span aria-hidden="true">↗</span></a></nav>
   </header>
-
-  <main id="explainer" class="explainer" aria-busy="true">
-    <section class="tour-summary" aria-live="polite">
-      <div><span id="scene-kicker">Loading</span><h1 id="scene-title">Preparing the KineSync-GS animation</h1></div>
-      <div class="tour-status"><span id="scene-count">01 / 11</span><span id="mode-label">Silent tour</span></div>
-    </section>
-
-    <section id="demo-shell" class="demo-shell">
-      <nav id="chapter-list" class="chapter-list" aria-label="Animation chapters"></nav>
-
-      <div class="stage-layout">
-        <section class="stage" aria-label="KineSync-GS animated method demonstration">
-          <div class="state-rail" aria-label="Shared synchronization contract">
-            <div class="rail-node" data-step="measurement"><span>01</span><b>Measurement</b></div><i aria-hidden="true"></i>
-            <div class="rail-node" data-step="proposal"><span>02</span><b>Proposal</b></div><i aria-hidden="true"></i>
-            <div class="rail-node" data-step="evidence"><span>03</span><b>Evidence</b></div><i aria-hidden="true"></i>
-            <div class="rail-node" data-step="output"><span>04</span><b>Verified state</b></div>
-            <div id="state-packet" class="state-packet" aria-hidden="true"></div>
-          </div>
-
-          <div class="animation-viewport">
-            <svg id="animation-stage" viewBox="0 0 960 520" role="img" aria-labelledby="scene-title animation-description"></svg>
-            <p id="animation-description" class="sr-only"></p>
-            <aside id="evidence-window" class="evidence-window" hidden>
-              <div class="evidence-heading"><span id="evidence-label">Recorded evidence</span><b id="evidence-counter"></b></div>
-              <div id="evidence-media" class="evidence-media"></div>
-            </aside>
-            <div class="scene-stamp"><span id="evidence-kind">Method animation</span><b id="scene-metric">—</b></div>
-          </div>
-
-          <div class="caption-panel" aria-live="polite"><p id="caption-en"></p></div>
-        </section>
-
-        <aside class="inspector" aria-label="Current computation">
-          <p class="panel-label">Current computation</p>
-          <h2 id="inspector-title">State synchronization</h2>
-          <p id="inspector-detail"></p>
-          <div id="detail-formula" class="detail-formula"></div>
-          <div id="inspector-flow" class="inspector-flow"></div>
-          <div class="readout"><span>Tracked object</span><strong id="tracked-object">Measured state qᵐ</strong></div>
-          <div class="readout"><span>Decision</span><strong id="decision-readout">Waiting for evidence</strong></div>
-          <div id="live-readouts" class="live-readouts"></div>
-          <div class="legend"><span><i class="measurement-dot"></i>Measurement</span><span><i class="proposal-dot"></i>Proposal</span><span><i class="accept-dot"></i>Verified</span><span><i class="fallback-dot"></i>Fallback</span></div>
-        </aside>
+  <main id="presentation">
+    <div class="chapter-heading">
+      <div><p id="eyebrow">KINEMATIC STATE SYNCHRONIZATION WITH GAUSSIAN SPLATTING</p><h1 id="title">A twin needs the right state.</h1></div>
+      <button id="chapters-toggle" class="quiet-button" aria-expanded="false" aria-controls="chapters"><span id="chapter-number">01 / 11</span><img src="static/icons/list.svg" alt=""></button>
+    </div>
+    <nav id="chapters" aria-label="Chapters" hidden></nav>
+    <div class="workbench">
+      <section class="animation" aria-label="Method animation">
+        <div class="scene-topline"><span id="scene-kind">METHOD ILLUSTRATION</span><div id="branch-controls" hidden><button data-branch="consistent" aria-pressed="true">Consistent views</button><button data-branch="conflict" aria-pressed="false">Stale view</button></div><div id="timing-controls" hidden><div class="timing-mode"><button data-timing="raw" aria-pressed="false">Raw</button><button data-timing="aligned" aria-pressed="false">Aligned</button></div><label id="lag-control">Camera lag <input id="lag" type="range" min="0.1" max="0.7" step="0.05" value="0.45"><output id="lag-value">450 ms</output></label></div></div>
+        <div class="canvas-scroll" tabindex="0" aria-label="Method diagram"><svg id="stage" viewBox="0 0 1000 530" role="img" aria-label="Animated state synchronization mechanism"></svg></div>
+        <div id="stage-note" class="stage-note"></div>
+      </section>
+      <aside class="evidence" aria-label="Evidence and takeaway">
+        <span class="overline" id="evidence-kind">THE PROBLEM</span>
+        <h2 id="takeaway"></h2>
+        <p id="evidence-description"></p>
+        <div id="result-facts"></div>
+        <figure id="media-figure" hidden><div id="media"></div><figcaption id="media-caption"></figcaption></figure>
+        <a class="evidence-link" href="static/paper/kinesync-gs.pdf">Read the paper <span aria-hidden="true">↗</span></a>
+      </aside>
+    </div>
+    <div class="speech"><span class="speech-label">NARRATION</span><p id="subtitle"></p></div>
+    <footer class="transport">
+      <div class="timeline-wrap"><input id="timeline" type="range" min="0" max="174" step="0.01" value="0" aria-label="Presentation timeline"><div id="timeline-marks"></div></div>
+      <div class="transport-row">
+        <div class="playback"><button id="prev" class="icon-button" title="Previous chapter" aria-label="Previous chapter"><img src="static/icons/skip-back.svg" alt=""></button><button id="play" class="play-button"><img id="play-icon" src="static/icons/play.svg" alt=""><span id="play-label">Play with narration</span></button><button id="next" class="icon-button" title="Next chapter" aria-label="Next chapter"><img src="static/icons/skip-forward.svg" alt=""></button><span class="clock"><span id="time">00:00</span><span class="clock-divider">/</span><span id="duration">02:54</span></span></div>
+        <div class="secondary-controls"><button id="replay" class="icon-button" title="Replay chapter" aria-label="Replay chapter"><img src="static/icons/rotate-ccw.svg" alt=""></button><button id="mute" class="icon-button" title="Mute narration" aria-label="Mute narration" aria-pressed="false"><img id="mute-icon" src="static/icons/volume-2.svg" alt=""></button><button id="fullscreen" class="icon-button" title="Fullscreen" aria-label="Fullscreen"><img src="static/icons/maximize.svg" alt=""></button></div>
       </div>
-
-      <div class="controls" aria-label="Tour playback controls">
-        <button id="previous" class="icon-button" type="button" title="Previous chapter" aria-label="Previous chapter">←</button>
-        <button id="play" class="play-button" type="button"><span aria-hidden="true">▶</span><b>Play tour</b></button>
-        <button id="next" class="icon-button" type="button" title="Next chapter" aria-label="Next chapter">→</button>
-        <span id="current-time" class="time">00:00</span>
-        <div class="timeline-wrap"><input id="timeline" type="range" min="0" max="150" value="0" step="0.02" aria-label="Tour timeline"><div id="timeline-markers" class="timeline-markers" aria-hidden="true"></div></div>
-        <span class="time">02:30</span>
-        <button id="audio" class="icon-button" type="button" disabled title="Narration will be synchronized after the recording is supplied" aria-label="Narration unavailable">♪</button>
-        <button id="fullscreen" class="icon-button" type="button" title="Fullscreen" aria-label="Fullscreen">⛶</button>
-        <button id="restart" class="icon-button" type="button" title="Restart tour" aria-label="Restart tour">↻</button>
-      </div>
-    </section>
+      <p id="playback-error" role="alert" hidden></p>
+    </footer>
   </main>
-
-  <noscript>This interactive animation requires JavaScript.</noscript>
 </body>
 </html>

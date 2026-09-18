@@ -1,149 +1,757 @@
 {
-  "version": 2,
-  "duration": 150,
-  "timingSource": "visual-plan-pre-audio",
-  "audio": null,
+  "version": 3,
+  "duration": 173.88,
+  "timingSource": "measured-segment-audio",
+  "audio": {
+    "mode": "segmented",
+    "masterClock": "HTMLAudioElement.currentTime",
+    "recordings": 10
+  },
   "scenes": [
     {
       "id": "real2sim2real",
       "start": 0,
-      "end": 14,
-      "title": "A digital twin must carry the right state",
+      "end": 15.6,
+      "title": "A twin needs the right state.",
       "shortTitle": "State, not appearance alone",
       "kicker": "Real2Sim2Real",
       "metric": "Appearance + articulation + time",
       "detail": "A useful Gaussian twin must reproduce the physical robot state that generated each observation, not only its visual appearance.",
       "formula": "observation I(t) ↔ articulated state q(t)",
       "caption": "KineSync-GS addresses a missing link in Real2Sim2Real. Gaussian Splatting can reproduce a robot visually, but a useful digital twin must also represent the physical robot's articulated state at the correct time.",
-      "evidence": {"label": "Physical execution", "media": "static/videos/piper-corn-to-plate.mp4", "poster": "static/images/piper-corn-to-plate-poster.jpg", "position": "center"}
+      "evidence": {
+        "label": "Physical execution",
+        "media": "static/videos/piper-corn-to-plate.mp4",
+        "poster": "static/images/piper-corn-to-plate-poster.jpg",
+        "caption": "Physical execution. Recorded excerpt at original speed."
+      },
+      "takeaway": "Appearance is only the beginning.",
+      "note": "One articulated state drives robot geometry and Gaussian appearance.",
+      "facts": [],
+      "audio": {
+        "src": "static/audio/narration/01.mp3",
+        "duration": 15.6,
+        "sha256": "4bfa894e5b33d34cc1958fdedd5523788a63cd5e22612900e3f807bc744a0fd4"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 5.4,
+          "text": "KineSync-GS addresses a missing link in Real2Sim2Real."
+        },
+        {
+          "start": 5.4,
+          "end": 15.6,
+          "text": "Gaussian Splatting can reproduce a robot visually, but a useful digital twin must also represent the physical robot's articulated state at the correct time."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 4.5,
+          "visual": 0.15
+        },
+        {
+          "audio": 8,
+          "visual": 0.5
+        },
+        {
+          "audio": 14.9,
+          "visual": 1
+        },
+        {
+          "audio": 15.6,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "failure",
-      "start": 14,
-      "end": 29,
-      "title": "Image fitting and state recovery can diverge",
+      "start": 15.6,
+      "end": 31.584,
+      "title": "A better image can hide a worse state.",
       "shortTitle": "Observed failure mode",
       "kicker": "Motivation",
       "metric": "Visual residual ↓ · State error ↑",
       "detail": "A delayed or conflicting image can reward a pose that renders better while moving the articulated state farther from the physical robot.",
       "formula": "Limage ↓ does not imply ‖q+ − q*‖ ↓",
-      "caption": "The difficulty appears when cameras are delayed or views disagree. Direct inverse rendering can keep lowering image error while joint error rises. A visually improved estimate therefore cannot receive automatic authority to modify the twin."
+      "caption": "The difficulty appears when cameras are delayed or views disagree. Direct inverse rendering can keep lowering image error while joint error rises. A visually improved estimate therefore cannot receive automatic authority to modify the twin.",
+      "takeaway": "Rendering loss cannot authorize an update.",
+      "note": "Illustrative fitting traces; the recorded failure is documented in the paper.",
+      "facts": [],
+      "audio": {
+        "src": "static/audio/narration/02.mp3",
+        "duration": 15.984,
+        "sha256": "dc1e1000da9b35f44b2c3d0da496d53fdf28db589b066651a79adb0e58c53815"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 4.32,
+          "text": "The difficulty appears when cameras are delayed or views disagree."
+        },
+        {
+          "start": 4.32,
+          "end": 10.02,
+          "text": "Direct inverse rendering can keep lowering image error while joint error rises."
+        },
+        {
+          "start": 10.02,
+          "end": 15.984,
+          "text": "A visually improved estimate therefore cannot receive automatic authority to modify the twin."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 3.5,
+          "visual": 0.15
+        },
+        {
+          "audio": 4.3,
+          "visual": 0.2
+        },
+        {
+          "audio": 9.1,
+          "visual": 0.75
+        },
+        {
+          "audio": 12.5,
+          "visual": 1
+        },
+        {
+          "audio": 15.984,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "contract",
-      "start": 29,
-      "end": 43,
-      "title": "Separate estimation from state-changing authority",
+      "start": 31.584,
+      "end": 47.568,
+      "title": "Proposals need permission to change state.",
       "shortTitle": "Proposal–evidence contract",
       "kicker": "Core principle",
       "metric": "Proposal → Evidence → Update / Fallback",
       "detail": "Rendering or motion proposes a bounded correction. Separate evidence decides whether that proposal becomes the published state.",
       "formula": "qˢ = Aτ(e) q+ + [1 − Aτ(e)] qᵐ",
-      "caption": "KineSync-GS separates two decisions. Rendering or motion first proposes a bounded correction. Cross-view or motion evidence then determines whether the proposal is committed as a verified update or the incoming measurement is preserved."
+      "caption": "KineSync-GS separates two decisions. Rendering or motion first proposes a bounded correction. Cross-view or motion evidence then determines whether the proposal is committed as a verified update or the incoming measurement is preserved.",
+      "takeaway": "Separate estimation from authority.",
+      "note": "Teaching vectors: all coordinates are committed together, or the full measurement is kept.",
+      "facts": [],
+      "audio": null,
+      "narrationStatus": "awaiting-replacement-03",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 3.2,
+          "text": "KineSync-GS separates two decisions."
+        },
+        {
+          "start": 3.2,
+          "end": 7.3,
+          "text": "Rendering or motion first proposes a bounded correction."
+        },
+        {
+          "start": 7.3,
+          "end": 15.984,
+          "text": "Cross-view or motion evidence then determines whether the proposal is committed as a verified update or the incoming measurement is preserved."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 3.2,
+          "visual": 0.32
+        },
+        {
+          "audio": 7.3,
+          "visual": 0.6
+        },
+        {
+          "audio": 13.8,
+          "visual": 1
+        },
+        {
+          "audio": 15.984,
+          "visual": 1
+        }
+      ],
+      "cueSource": "silent-visual-interlude"
     },
     {
       "id": "spatial",
-      "start": 43,
-      "end": 60,
-      "title": "Cross-view evidence verifies one coordinated state",
+      "start": 47.568,
+      "end": 64.296,
+      "title": "Verify the complete correction.",
       "shortTitle": "Spatial synchronization",
       "kicker": "Kinematic Gaussian recovery",
       "metric": "‖q+ − qᵐ‖∞ ≤ 0.18 rad",
       "detail": "Kinematics binds Gaussians to links, multi-view fitting proposes one joint vector, and view-specific estimates verify the complete correction.",
       "formula": "q+ = qᵐ + SI b tanh(z),   esp = (r, g, a, d)",
       "caption": "For spatial synchronization, fixed kinematics bind Gaussians to robot links and inverse rendering estimates one coordinated joint correction. View-specific estimates provide evidence for the complete proposal, which is committed atomically or rejected as a whole.",
-      "evidence": {"label": "Recorded spatial case", "media": "static/videos/spatial-synchronization.mp4", "poster": "static/images/spatial-synchronization-poster.jpg", "position": "left"}
+      "evidence": {
+        "label": "Recorded spatial case",
+        "media": "static/videos/spatial-synchronization.mp4",
+        "poster": "static/images/spatial-synchronization-poster.jpg",
+        "caption": "Recorded spatial case. Recorded excerpt at original speed."
+      },
+      "takeaway": "A coordinated correction stays whole.",
+      "note": "Computed teaching example; disagreement uses the paper definition and Franka threshold.",
+      "facts": [],
+      "audio": {
+        "src": "static/audio/narration/04.mp3",
+        "duration": 16.728,
+        "sha256": "d862353675964cfc6cb57f1dbb8965b77937ec4fb677cf61beea9c4ca40ec1a1"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 9.32,
+          "text": "For spatial synchronization, fixed kinematics bind Gaussians to robot links and inverse rendering estimates one coordinated joint correction."
+        },
+        {
+          "start": 9.32,
+          "end": 16.728,
+          "text": "View-specific estimates provide evidence for the complete proposal, which is committed atomically or rejected as a whole."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 4.5,
+          "visual": 0.25
+        },
+        {
+          "audio": 8.46,
+          "visual": 0.55
+        },
+        {
+          "audio": 9.32,
+          "visual": 0.6
+        },
+        {
+          "audio": 15.7,
+          "visual": 1
+        },
+        {
+          "audio": 16.728,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "temporal",
-      "start": 60,
-      "end": 74,
-      "title": "Motion evidence aligns cameras with telemetry",
+      "start": 64.296,
+      "end": 80.808,
+      "title": "Put images and telemetry on the same clock.",
       "shortTitle": "Temporal synchronization",
       "kicker": "Verified resampling",
       "metric": "Image motion ↔ Joint motion",
       "detail": "Cross-modal motion proposes residual lag after native-delay correction, then timing evidence verifies whether the state stream should be resampled.",
       "formula": "Δt+ = arg maxτ corr(vimage(t), vjoint(t + τ))",
       "caption": "The temporal path instantiates the same contract. Image and telemetry motion propose a residual lag after native-delay correction. Timing evidence then selects corrected resampling or preserves the original camera-to-state association.",
-      "evidence": {"label": "Recorded timing case", "media": "static/videos/temporal-synchronization.mp4", "poster": "static/images/temporal-synchronization-poster.jpg", "position": "top-right"}
+      "evidence": {
+        "label": "Recorded timing case",
+        "media": "static/videos/temporal-synchronization.mp4",
+        "poster": "static/images/temporal-synchronization-poster.jpg",
+        "caption": "Recorded timing case. Recorded excerpt at original speed."
+      },
+      "takeaway": "Motion provides the timing evidence.",
+      "note": "Computed motion signals and normalized correlation; drag camera lag to inspect alignment.",
+      "facts": [],
+      "audio": {
+        "src": "static/audio/narration/05.mp3",
+        "duration": 16.512,
+        "sha256": "094337f6c9f1bbc91752d86667a671f593419a0c6d46f73872d7b3dd4a28dca8"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 3.52,
+          "text": "The temporal path instantiates the same contract."
+        },
+        {
+          "start": 3.52,
+          "end": 9.42,
+          "text": "Image and telemetry motion propose a residual lag after native-delay correction."
+        },
+        {
+          "start": 9.42,
+          "end": 16.512,
+          "text": "Timing evidence then selects corrected resampling or preserves the original camera-to-state association."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 2.74,
+          "visual": 0.12
+        },
+        {
+          "audio": 3.52,
+          "visual": 0.18
+        },
+        {
+          "audio": 8.54,
+          "visual": 0.54
+        },
+        {
+          "audio": 9.42,
+          "visual": 0.56
+        },
+        {
+          "audio": 15.56,
+          "visual": 1
+        },
+        {
+          "audio": 16.512,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "controlled",
-      "start": 74,
-      "end": 89,
-      "title": "Whole-state verification resolves view conflict",
+      "start": 80.808,
+      "end": 97.944,
+      "title": "Keep useful corrections. Reject harmful ones.",
       "shortTitle": "Controlled Franka",
       "kicker": "48 held-out conditions",
       "metric": "0.590° → 0.322° · 0 harmful / 48",
       "detail": "The verifier retains every useful coordinated proposal while rejecting updates that would move the twin away from the physical state.",
       "formula": "qMAE(qᵐ) = 0.590°  →  qMAE(qˢ) = 0.322°",
       "caption": "On twelve held-out Franka poses and forty-eight view-offset conditions, KineSync-GS reduces whole-state joint error from zero point five nine zero to zero point three two two degrees. It retains all twelve helpful proposals and makes no harmful update.",
-      "evidence": {"label": "Measured aggregate", "media": "static/images/demo-spatial-summary.png", "position": "top-right"}
+      "evidence": {
+        "label": "Measured aggregate",
+        "media": "static/images/demo-spatial-summary.png",
+        "caption": "Measured aggregate. Reported experimental results."
+      },
+      "takeaway": "Accuracy and update reliability improve together.",
+      "note": "Reported aggregates; the grid shows counts, not an ordering of individual cases.",
+      "facts": [
+        [
+          "0.590° → 0.322°",
+          "Whole-state joint error"
+        ],
+        [
+          "0 / 48",
+          "Harmful whole-state updates"
+        ]
+      ],
+      "audio": {
+        "src": "static/audio/narration/06.mp3",
+        "duration": 17.136,
+        "sha256": "f18314f1cdf1c6d332f2042bb64be425c8912bb27d82f538b978aa118d548d62"
+      },
+      "narrationStatus": "recorded",
+      "kind": "EXPERIMENTAL RESULTS",
+      "cues": [
+        {
+          "start": 0,
+          "end": 12.3,
+          "text": "On twelve held-out Franka poses and forty-eight view-offset conditions, KineSync-GS reduces whole-state joint error from zero point five nine zero to zero point three two two degrees."
+        },
+        {
+          "start": 12.3,
+          "end": 17.136,
+          "text": "It retains all twelve helpful proposals and makes no harmful update."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 5,
+          "visual": 0.15
+        },
+        {
+          "audio": 11.48,
+          "visual": 0.65
+        },
+        {
+          "audio": 12.3,
+          "visual": 0.68
+        },
+        {
+          "audio": 16.38,
+          "visual": 1
+        },
+        {
+          "audio": 17.136,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "mechanism",
-      "start": 89,
-      "end": 103,
-      "title": "Factorized evidence sharpens update decisions",
+      "start": 97.944,
+      "end": 115.32,
+      "title": "Better evidence makes better decisions.",
       "shortTitle": "Mechanism ablations",
       "kicker": "Why verification works",
       "metric": "Dual-view recovery 42.86% → 80.95%",
       "detail": "Persistent camera and joint calibration are factorized before evaluation; component re-verification then preserves successful proposals.",
       "formula": "shared joint zero + view-specific camera residual",
       "caption": "The mechanism ablations explain this selectivity. Factorized calibration raises dual-view recovery from forty-two point eight six to eighty point nine five percent, while component re-verification retains eighty-eight point eight nine percent of successful proposals.",
-      "evidence": {"label": "Matched ablation", "media": "static/images/demo-mechanism-ablation.png", "position": "top-right"}
+      "evidence": {
+        "label": "Matched ablation",
+        "media": "static/images/demo-mechanism-ablation.png",
+        "caption": "Matched ablation. Reported experimental results."
+      },
+      "takeaway": "Factorized calibration strengthens verification.",
+      "note": "Reported calibration and retention results; complete protocols are in the paper.",
+      "facts": [
+        [
+          "42.86% → 80.95%",
+          "Dual-view recovery"
+        ]
+      ],
+      "audio": {
+        "src": "static/audio/narration/07.mp3",
+        "duration": 17.376,
+        "sha256": "7fa54d81de9bc897c5889aecaff2cf776d453e7d4fbcc4b460393a6c443c6f18"
+      },
+      "narrationStatus": "recorded",
+      "kind": "EXPERIMENTAL RESULTS",
+      "cues": [
+        {
+          "start": 0,
+          "end": 3.58,
+          "text": "The mechanism ablations explain this selectivity."
+        },
+        {
+          "start": 3.58,
+          "end": 17.376,
+          "text": "Factorized calibration raises dual-view recovery from forty-two point eight six to eighty point nine five percent, while component re-verification retains eighty-eight point eight nine percent of successful proposals."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 2.7,
+          "visual": 0.12
+        },
+        {
+          "audio": 3.58,
+          "visual": 0.2
+        },
+        {
+          "audio": 10,
+          "visual": 0.57
+        },
+        {
+          "audio": 16.4,
+          "visual": 1
+        },
+        {
+          "audio": 17.376,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "real-world",
-      "start": 103,
-      "end": 118,
-      "title": "The state contract transfers to physical PiPER motion",
+      "start": 115.32,
+      "end": 130.68,
+      "title": "A common interface for real observations.",
       "shortTitle": "Real-world PiPER",
       "kicker": "Head and wrist cameras",
       "metric": "84.06 mrad → 2.26 mrad",
       "detail": "Matched physical views supply cross-view evidence while the Gaussian backend publishes one task-ready articulated state stream.",
       "formula": "camera views → proposal → cross-view evidence → qˢ(t)",
       "caption": "Real-world PiPER recordings evaluate the same interface under physical motion and matched head and wrist cameras. Cross-view evidence aligns the rendered gripper while the verified state remains available throughout corn-to-plate execution.",
-      "evidence": {"label": "PiPER execution", "media": "static/videos/piper-corn-to-plate.mp4", "poster": "static/images/piper-corn-to-plate-poster.jpg", "position": "left"}
+      "evidence": {
+        "label": "PiPER execution",
+        "media": "static/videos/piper-corn-to-plate.mp4",
+        "poster": "static/images/piper-corn-to-plate-poster.jpg",
+        "caption": "PiPER execution. Recorded excerpt at original speed."
+      },
+      "takeaway": "The state contract carries across backends.",
+      "note": "State-indexed retrieval schematic; the inset shows recorded physical PiPER execution.",
+      "facts": [
+        [
+          "84.06 → 2.26 mrad",
+          "Real-world replay joint error"
+        ]
+      ],
+      "audio": {
+        "src": "static/audio/narration/08.mp3",
+        "duration": 15.36,
+        "sha256": "c77da5bae71db773c5660b7f52dbda498c5090e7e59be77770701f340b681876"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 7.72,
+          "text": "Real-world PiPER recordings evaluate the same interface under physical motion and matched head and wrist cameras."
+        },
+        {
+          "start": 7.72,
+          "end": 15.36,
+          "text": "Cross-view evidence aligns the rendered gripper while the verified state remains available throughout corn-to-plate execution."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 6.8,
+          "visual": 0.4
+        },
+        {
+          "audio": 7.72,
+          "visual": 0.48
+        },
+        {
+          "audio": 14.48,
+          "visual": 1
+        },
+        {
+          "audio": 15.36,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "online",
-      "start": 118,
-      "end": 132,
-      "title": "Spatial and temporal evidence work together online",
+      "start": 130.68,
+      "end": 147.12,
+      "title": "One verified chain, online.",
       "shortTitle": "Complete online chain",
       "kicker": "Three PiPER tasks",
       "metric": "3.07 mrad · 0.36% harmful",
       "detail": "The online chain associates asynchronous measurements, verifies spatial recovery, and publishes a synchronized state for every task.",
       "formula": "camera + telemetry → temporal verify → spatial verify → qˢ",
       "caption": "In the complete online chain, spatial and temporal evidence are complementary. KineSync-GS reaches three point zero seven milliradians qMAE with eighty-three point zero five percent recovery and only zero point three six percent harmful updates.",
-      "evidence": {"label": "Online ablation", "media": "static/images/demo-online-ablation.png", "position": "top-right"}
+      "evidence": {
+        "label": "Online ablation",
+        "media": "static/images/demo-online-ablation.png",
+        "caption": "Online ablation. Reported experimental results."
+      },
+      "takeaway": "Spatial and temporal evidence complement each other.",
+      "note": "Online pipeline schematic with reported experiment-level metrics.",
+      "facts": [
+        [
+          "3.07 mrad",
+          "Complete online chain"
+        ],
+        [
+          "0.36%",
+          "Harmful updates"
+        ]
+      ],
+      "audio": {
+        "src": "static/audio/narration/09.mp3",
+        "duration": 16.44,
+        "sha256": "8f168957afec521dc8244ac2776788495774049cd5127bc4be8aab5924ed92d3"
+      },
+      "narrationStatus": "recorded",
+      "kind": "EXPERIMENTAL RESULTS",
+      "cues": [
+        {
+          "start": 0,
+          "end": 5.32,
+          "text": "In the complete online chain, spatial and temporal evidence are complementary."
+        },
+        {
+          "start": 5.32,
+          "end": 16.44,
+          "text": "KineSync-GS reaches three point zero seven milliradians qMAE with eighty-three point zero five percent recovery and only zero point three six percent harmful updates."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 4.2,
+          "visual": 0.48
+        },
+        {
+          "audio": 5.32,
+          "visual": 0.6
+        },
+        {
+          "audio": 15.6,
+          "visual": 1
+        },
+        {
+          "audio": 16.44,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "policy",
-      "start": 132,
-      "end": 143,
-      "title": "A synchronized state improves an unchanged policy",
+      "start": 147.12,
+      "end": 163.632,
+      "title": "Better state. The same policy.",
       "shortTitle": "Same-policy manipulation",
       "kicker": "240 paired real-robot episodes",
       "metric": "58.33% → 71.67%",
       "detail": "Raw and synchronized states feed the same policy under the same task budget, isolating the effect of state synchronization.",
       "formula": "π(a | qraw)  versus  π(a | qˢ),   π fixed",
       "caption": "Most importantly, synchronization improves downstream manipulation without changing the policy. Across two hundred forty paired real-robot episodes, task-macro success rises from fifty-eight point three three to seventy-one point six seven percent.",
-      "evidence": {"label": "Same-policy task", "media": "static/videos/piper-red-cube-to-plate.mp4", "poster": "static/images/piper-red-cube-to-plate-poster.jpg", "position": "left"}
+      "evidence": {
+        "label": "Same-policy task",
+        "media": "static/videos/piper-red-cube-to-plate.mp4",
+        "poster": "static/images/piper-red-cube-to-plate-poster.jpg",
+        "caption": "Same-policy task. Recorded excerpt at original speed."
+      },
+      "takeaway": "Synchronization improves manipulation.",
+      "note": "Controlled comparison: unchanged policy and matched episode budget.",
+      "facts": [
+        [
+          "+13.34 pp",
+          "Task-macro success"
+        ],
+        [
+          "240",
+          "Paired real-robot episodes"
+        ]
+      ],
+      "audio": {
+        "src": "static/audio/narration/10.mp3",
+        "duration": 16.512,
+        "sha256": "7d24f2a70c3d73da69906a56a96a65716aae022832d69425426739d8aea23607"
+      },
+      "narrationStatus": "recorded",
+      "kind": "EXPERIMENTAL RESULTS",
+      "cues": [
+        {
+          "start": 0,
+          "end": 6.7,
+          "text": "Most importantly, synchronization improves downstream manipulation without changing the policy."
+        },
+        {
+          "start": 6.7,
+          "end": 16.512,
+          "text": "Across two hundred forty paired real-robot episodes, task-macro success rises from fifty-eight point three three to seventy-one point six seven percent."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 5.68,
+          "visual": 0.35
+        },
+        {
+          "audio": 6.7,
+          "visual": 0.4
+        },
+        {
+          "audio": 16.02,
+          "visual": 1
+        },
+        {
+          "audio": 16.512,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "closing",
-      "start": 143,
-      "end": 150,
-      "title": "One verified state interface across robot stacks",
+      "start": 163.632,
+      "end": 173.88,
+      "title": "Propose. Verify. Synchronize.",
       "shortTitle": "Reusable interface",
       "kicker": "KineSync-GS",
       "metric": "Proposal · Evidence · Verified state",
       "detail": "Robot-specific renderers and camera layouts remain behind adapters while simulators and policies consume one synchronized state contract.",
       "formula": "robot adapters → KineSync-GS state bus → twin / simulator / policy",
       "caption": "KineSync-GS turns visual evidence into a verified state-changing interface across Gaussian twins, simulators, and downstream robot policies.",
-      "evidence": {"label": "External stack", "media": "static/videos/abc-bimanual-policy.mp4", "poster": "static/images/abc-bimanual-policy-poster.jpg", "position": "left"}
+      "evidence": {
+        "label": "External stack",
+        "media": "static/videos/abc-bimanual-policy.mp4",
+        "poster": "static/images/abc-bimanual-policy-poster.jpg",
+        "caption": "External stack. Recorded excerpt at original speed."
+      },
+      "takeaway": "A verified interface between the real and virtual.",
+      "note": "Kinematic State Synchronization with Gaussian Splatting.",
+      "facts": [],
+      "audio": {
+        "src": "static/audio/narration/11.mp3",
+        "duration": 10.248,
+        "sha256": "5dbb88e563def782621e60dd730abf6b7a2e13f08fc92144586114e0dd86f0f4"
+      },
+      "narrationStatus": "recorded",
+      "kind": "METHOD ILLUSTRATION",
+      "cues": [
+        {
+          "start": 0,
+          "end": 10.248,
+          "text": "KineSync-GS turns visual evidence into a verified state-changing interface across Gaussian twins, simulators, and downstream robot policies."
+        }
+      ],
+      "keyframes": [
+        {
+          "audio": 0,
+          "visual": 0
+        },
+        {
+          "audio": 3,
+          "visual": 0.32
+        },
+        {
+          "audio": 6,
+          "visual": 0.7
+        },
+        {
+          "audio": 9.4,
+          "visual": 1
+        },
+        {
+          "audio": 10.248,
+          "visual": 1
+        }
+      ],
+      "cueSource": "cpu-word-timestamps-script-matched"
     }
   ]
 }
