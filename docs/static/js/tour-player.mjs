@@ -29,7 +29,7 @@ const icon=(id,name)=>$(id).src=`static/icons/${name}.svg`;
 const options=()=>inspection||{branch:'consistent',lag:.45};
 function draw(force=false){
   const scene=scenes[index];if(!scene)return;
-  const p=inspection?Math.max(.95,visualProgress(scene,local)):visualProgress(scene,local);
+  const p=inspection?.progress??(inspection?Math.max(.95,visualProgress(scene,local)):visualProgress(scene,local));
   const markup=renderScene(scene.id,p,options());
   if(markup!==lastMarkup||force){$('stage').innerHTML=markup;lastMarkup=markup;}
   robot?.update(scene.id,p,options(),layouts[scene.id].robots);
@@ -151,7 +151,7 @@ $('chapters-toggle').addEventListener('click',()=>{$('chapters').hidden=!$('chap
 document.querySelectorAll('[data-branch]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={branch:button.dataset.branch,lag:.45};document.querySelectorAll('[data-branch]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
 $('lag').addEventListener('input',()=>{pause();const lag=Number($('lag').value);inspection={branch:'consistent',lag,aligned:inspection?.aligned??0};$('lag-value').textContent=`${Math.round(lag*1000)} ms`;document.querySelectorAll('[data-timing]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.timing==='aligned')===Boolean(inspection.aligned))));draw(true);});
 document.querySelectorAll('[data-timing]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={branch:'consistent',lag:Number($('lag').value),aligned:button.dataset.timing==='aligned'?1:0};document.querySelectorAll('[data-timing]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
-document.querySelectorAll('[data-representation]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={...options(),representation:button.dataset.representation};document.querySelectorAll('[data-representation]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
+document.querySelectorAll('[data-representation]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={...options(),progress:inspection?.progress??visualProgress(scenes[index],local),representation:button.dataset.representation};document.querySelectorAll('[data-representation]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
 document.addEventListener('keydown',event=>{if(/INPUT|BUTTON|SELECT|TEXTAREA/.test(event.target.tagName))return;if(event.code==='Space'){event.preventDefault();playing?pause():void play();}if(event.code==='ArrowRight')seek(time+5);if(event.code==='ArrowLeft')seek(time-5);if(event.code==='Escape'){$('chapters').hidden=true;$('chapters-toggle').setAttribute('aria-expanded','false');}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 window.addEventListener('pagehide',()=>{pause();cancelAnimationFrame(frame);robot?.dispose();objectUrls.forEach(url=>URL.revokeObjectURL(url));});
@@ -165,7 +165,7 @@ function openImage(evidence){
   dialog.append(close,img);document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.showModal();
 }
 try{
-  const {RobotStage}=await import('./tour-robot.mjs');
+  const {RobotStage}=await import('./tour-robot.mjs?v=4.1');
   robot=new RobotStage($('robot-canvas'),$('scene-surface'),pause);draw(true);
   await robot.loadPromise;draw(true);
 }catch(error){

@@ -93,10 +93,11 @@ export class RobotStage{
    if(id==='real2sim2real')splat=i===0?0:phase(p,.24,.67);
    if(id==='closing')splat=.75;
    q.forEach((value,j)=>view.robot.setJointValue('panda_joint'+(j+1),value));view.robot.setJointValue('panda_finger_joint1',.022+.014*Math.sin(motion*Math.PI));
-   if(options.representation==='mesh')splat=0;
-   if(options.representation==='gaussians')splat=1;
-   if(options.representation==='overlay')splat=.7;
-   view.meshes.forEach(mesh=>{mesh.material.transparent=true;mesh.material.opacity=options.representation==='gaussians'?0:1-splat*.65;mesh.material.depthWrite=splat<.5;});
+   const mode=id==='real2sim2real'&&i===0?'mesh':options.representation;
+   if(mode==='mesh')splat=0;
+   if(mode==='gaussians')splat=1;
+   if(mode==='overlay')splat=.7;
+   view.meshes.forEach(mesh=>{mesh.material.transparent=true;mesh.material.opacity=mode==='gaussians'?0:1-splat*.65;mesh.material.depthWrite=splat<.5;});
    view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=.92*splat;});
    view.robot.updateMatrixWorld(true);this.canvas.dataset.joints=q.map(v=>v.toFixed(4)).join(',');
   });this.paint();
