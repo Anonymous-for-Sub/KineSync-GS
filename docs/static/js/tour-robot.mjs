@@ -87,6 +87,7 @@ export class RobotStage{
   this.last=[id,p,options,slots];this.active=slots.length>0;this.canvas.hidden=!this.active;
   this.views.forEach((view,i)=>{
    const slot=slots[i];view.target.hidden=!slot;view.bounds=slot;if(!slot)return;
+   view.camera.zoom=id==='failure'?.8:1;
    Object.assign(view.target.style,{left:slot.x/12+'%',top:slot.y/5.6+'%',width:slot.w/12+'%',height:slot.h/5.6+'%'});
    if(!this.ready)return;
    let q=[...HOME],splat=.0,ghostQ=null,ghostOpacity=.19,ghostColor=0xcc9e4c;
