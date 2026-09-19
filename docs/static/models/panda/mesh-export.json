@@ -1,0 +1,276 @@
+[
+  {
+    "name": "link0",
+    "parts": [
+      {
+        "file": "link0_0.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "link0_1.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link0_2.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "link0_3.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link0_4.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "link0_5.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link0_7.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link0_8.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link0_9.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link0_10.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "link0_11.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link1",
+    "parts": [
+      {
+        "file": "link1.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link2",
+    "parts": [
+      {
+        "file": "link2.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link3",
+    "parts": [
+      {
+        "file": "link3_0.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link3_1.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link3_2.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link3_3.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      }
+    ]
+  },
+  {
+    "name": "link4",
+    "parts": [
+      {
+        "file": "link4_0.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link4_1.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link4_2.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link4_3.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link5",
+    "parts": [
+      {
+        "file": "link5_0.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link5_1.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link5_2.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link6",
+    "parts": [
+      {
+        "file": "link6_0.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "link6_1.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_2.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link6_3.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_4.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_5.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_6.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_7.obj",
+        "rgba": "0.039216 0.541176 0.780392 1"
+      },
+      {
+        "file": "link6_8.obj",
+        "rgba": "0.039216 0.541176 0.780392 1"
+      },
+      {
+        "file": "link6_9.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link6_10.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link6_11.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_12.obj",
+        "rgba": "0 1 0 1"
+      },
+      {
+        "file": "link6_13.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link6_14.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link6_15.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link6_16.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "link7",
+    "parts": [
+      {
+        "file": "link7_0.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "link7_1.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_2.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_3.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_4.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_5.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_6.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "link7_7.obj",
+        "rgba": "1 1 1 1"
+      }
+    ]
+  },
+  {
+    "name": "hand",
+    "parts": [
+      {
+        "file": "hand_0.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "hand_1.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "hand_2.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      },
+      {
+        "file": "hand_3.obj",
+        "rgba": "1 1 1 1"
+      },
+      {
+        "file": "hand_4.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      }
+    ]
+  },
+  {
+    "name": "finger",
+    "parts": [
+      {
+        "file": "finger_0.obj",
+        "rgba": "0.901961 0.921569 0.929412 1"
+      },
+      {
+        "file": "finger_1.obj",
+        "rgba": "0.25 0.25 0.25 1"
+      }
+    ]
+  }
+]

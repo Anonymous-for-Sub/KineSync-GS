@@ -7,37 +7,35 @@
   <meta name="description" content="An animated, narrated explanation of KineSync-GS: from a proposed correction to a verified robot state.">
   <title>KineSync-GS | The narrated method</title>
   <link rel="icon" href="static/images/favicon-32.png">
-  <link rel="stylesheet" href="static/css/explainer.css?v=3">
-  <script type="module" src="static/js/tour-player.mjs?v=3"></script>
+  <link rel="stylesheet" href="static/css/explainer.css?v=4">
+  <link rel="stylesheet" href="static/css/tour-stage.css?v=4">
+  <link rel="stylesheet" href="static/css/tour-fit.css?v=4">
+  <script type="importmap">{"imports":{"three":"./static/vendor/three/build/three.module.min.js","three/examples/jsm/":"./static/vendor/three/examples/jsm/"}}</script>
+  <script type="module" src="static/js/tour-player.mjs?v=4"></script>
 </head>
 <body>
   <header class="sitebar">
     <a class="brand" href="index.html"><img src="static/images/kinesync-gs-logo.png" alt="">KineSync-GS</a>
-    <span class="edition">THE NARRATED METHOD</span>
     <nav><a href="index.html">Project</a><a href="static/paper/kinesync-gs.pdf">Paper <span aria-hidden="true">↗</span></a></nav>
   </header>
   <main id="presentation">
     <div class="chapter-heading">
-      <div><p id="eyebrow">KINEMATIC STATE SYNCHRONIZATION WITH GAUSSIAN SPLATTING</p><h1 id="title">A twin needs the right state.</h1></div>
+      <div><h1 id="title">A twin needs the right state.</h1></div>
       <button id="chapters-toggle" class="quiet-button" aria-expanded="false" aria-controls="chapters"><span id="chapter-number">01 / 11</span><img src="static/icons/list.svg" alt=""></button>
     </div>
     <nav id="chapters" aria-label="Chapters" hidden></nav>
     <div class="workbench">
       <section class="animation" aria-label="Method animation">
-        <div class="scene-topline"><span id="scene-kind">METHOD ILLUSTRATION</span><div id="branch-controls" hidden><button data-branch="consistent" aria-pressed="true">Consistent views</button><button data-branch="conflict" aria-pressed="false">Stale view</button></div><div id="timing-controls" hidden><div class="timing-mode"><button data-timing="raw" aria-pressed="false">Raw</button><button data-timing="aligned" aria-pressed="false">Aligned</button></div><label id="lag-control">Camera lag <input id="lag" type="range" min="0.1" max="0.7" step="0.05" value="0.45"><output id="lag-value">450 ms</output></label></div></div>
-        <div class="canvas-scroll" tabindex="0" aria-label="Method diagram"><svg id="stage" viewBox="0 0 1000 530" role="img" aria-label="Animated state synchronization mechanism"></svg></div>
-        <div id="stage-note" class="stage-note"></div>
+        <div class="scene-topline"><div id="representation-controls"><button data-representation="mesh" aria-pressed="false">Mesh</button><button data-representation="gaussians" aria-pressed="false">Gaussians</button><button data-representation="overlay" aria-pressed="false">Overlay</button></div><div id="branch-controls" hidden><button data-branch="consistent" aria-pressed="true">Consistent views</button><button data-branch="conflict" aria-pressed="false">Stale view</button></div><div id="timing-controls" hidden><div class="timing-mode"><button data-timing="raw" aria-pressed="false">Raw</button><button data-timing="aligned" aria-pressed="false">Aligned</button></div><label id="lag-control">Camera lag <input id="lag" type="range" min="0.1" max="0.7" step="0.05" value="0.45"><output id="lag-value">450 ms</output></label></div></div>
+        <div class="canvas-scroll"><div id="scene-surface">
+          <canvas id="robot-canvas" aria-label="Interactive articulated Panda with link-bound Gaussian surface samples"></canvas>
+          <div id="stage-media"></div>
+          <svg id="stage" viewBox="0 0 1200 560" role="img" aria-label="Animated state synchronization mechanism"></svg>
+        </div></div>
+        <p id="robot-error" role="status" hidden></p>
       </section>
-      <aside class="evidence" aria-label="Evidence and takeaway">
-        <span class="overline" id="evidence-kind">THE PROBLEM</span>
-        <h2 id="takeaway"></h2>
-        <p id="evidence-description"></p>
-        <div id="result-facts"></div>
-        <figure id="media-figure" hidden><div id="media"></div><figcaption id="media-caption"></figcaption></figure>
-        <a class="evidence-link" href="static/paper/kinesync-gs.pdf">Read the paper <span aria-hidden="true">↗</span></a>
-      </aside>
     </div>
-    <div class="speech"><span class="speech-label">NARRATION</span><p id="subtitle"></p></div>
+    <div class="speech" aria-label="Narration"><p id="subtitle"></p></div>
     <footer class="transport">
       <div class="timeline-wrap"><input id="timeline" type="range" min="0" max="174" step="0.01" value="0" aria-label="Presentation timeline"><div id="timeline-marks"></div></div>
       <div class="transport-row">

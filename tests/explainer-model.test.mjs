@@ -1,7 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {bounded,spatial,qMeasured,lagSearch,locate,cueAt,visualProgress} from '../docs/static/js/tour-math.mjs';
-import {renderScene,sceneIds} from '../docs/static/js/tour-scenes.mjs';
+import {renderScene,sceneIds,layouts} from '../docs/static/js/tour-composition.mjs';
+
+test('robot and evidence regions stay inside the shared stage',()=>{
+ for(const id of sceneIds)for(const r of [...layouts[id].robots,...layouts[id].media]){
+  assert.ok(r.x>=0&&r.y>=0&&r.w>0&&r.h>0);
+  assert.ok(r.x+r.w<=1200&&r.y+r.h<=560,`${id} exceeds stage bounds`);
+ }
+});
 
 test('all proposed joint corrections respect the scalar bound',()=>{
  for(const z of [-100,-1,0,1,100])assert.ok(Math.abs(bounded([z])[0])<=.18);

@@ -1,11 +1,11 @@
 {
-  "version": 3,
-  "duration": 173.88,
+  "version": 4,
+  "duration": 174.192,
   "timingSource": "measured-segment-audio",
   "audio": {
     "mode": "segmented",
     "masterClock": "HTMLAudioElement.currentTime",
-    "recordings": 10
+    "recordings": 11
   },
   "scenes": [
     {
@@ -140,7 +140,7 @@
     {
       "id": "contract",
       "start": 31.584,
-      "end": 47.568,
+      "end": 47.88,
       "title": "Proposals need permission to change state.",
       "shortTitle": "Proposal–evidence contract",
       "kicker": "Core principle",
@@ -151,23 +151,27 @@
       "takeaway": "Separate estimation from authority.",
       "note": "Teaching vectors: all coordinates are committed together, or the full measurement is kept.",
       "facts": [],
-      "audio": null,
-      "narrationStatus": "awaiting-replacement-03",
+      "audio": {
+        "src": "static/audio/narration/03.mp3",
+        "duration": 16.296,
+        "sha256": "1df30cc88e7e0af3edc572c6f730169748972c8ab1c331f6fab023ba805e9326"
+      },
+      "narrationStatus": "recorded",
       "kind": "METHOD ILLUSTRATION",
       "cues": [
         {
           "start": 0,
-          "end": 3.2,
+          "end": 3.42,
           "text": "KineSync-GS separates two decisions."
         },
         {
-          "start": 3.2,
-          "end": 7.3,
+          "start": 3.42,
+          "end": 7.36,
           "text": "Rendering or motion first proposes a bounded correction."
         },
         {
-          "start": 7.3,
-          "end": 15.984,
+          "start": 7.36,
+          "end": 16.296,
           "text": "Cross-view or motion evidence then determines whether the proposal is committed as a verified update or the incoming measurement is preserved."
         }
       ],
@@ -177,28 +181,32 @@
           "visual": 0
         },
         {
-          "audio": 3.2,
-          "visual": 0.32
+          "audio": 3.42,
+          "visual": 0.2
         },
         {
-          "audio": 7.3,
-          "visual": 0.6
+          "audio": 7.36,
+          "visual": 0.48
         },
         {
-          "audio": 13.8,
+          "audio": 13.14,
+          "visual": 0.8
+        },
+        {
+          "audio": 15.4,
           "visual": 1
         },
         {
-          "audio": 15.984,
+          "audio": 16.296,
           "visual": 1
         }
       ],
-      "cueSource": "silent-visual-interlude"
+      "cueSource": "cpu-word-timestamps-script-matched"
     },
     {
       "id": "spatial",
-      "start": 47.568,
-      "end": 64.296,
+      "start": 47.88,
+      "end": 64.608,
       "title": "Verify the complete correction.",
       "shortTitle": "Spatial synchronization",
       "kicker": "Kinematic Gaussian recovery",
@@ -264,8 +272,8 @@
     },
     {
       "id": "temporal",
-      "start": 64.296,
-      "end": 80.808,
+      "start": 64.608,
+      "end": 81.12,
       "title": "Put images and telemetry on the same clock.",
       "shortTitle": "Temporal synchronization",
       "kicker": "Verified resampling",
@@ -340,8 +348,8 @@
     },
     {
       "id": "controlled",
-      "start": 80.808,
-      "end": 97.944,
+      "start": 81.12,
+      "end": 98.256,
       "title": "Keep useful corrections. Reject harmful ones.",
       "shortTitle": "Controlled Franka",
       "kicker": "48 held-out conditions",
@@ -415,8 +423,8 @@
     },
     {
       "id": "mechanism",
-      "start": 97.944,
-      "end": 115.32,
+      "start": 98.256,
+      "end": 115.632,
       "title": "Better evidence makes better decisions.",
       "shortTitle": "Mechanism ablations",
       "kicker": "Why verification works",
@@ -486,8 +494,8 @@
     },
     {
       "id": "real-world",
-      "start": 115.32,
-      "end": 130.68,
+      "start": 115.632,
+      "end": 130.992,
       "title": "A common interface for real observations.",
       "shortTitle": "Real-world PiPER",
       "kicker": "Head and wrist cameras",
@@ -554,8 +562,8 @@
     },
     {
       "id": "online",
-      "start": 130.68,
-      "end": 147.12,
+      "start": 130.992,
+      "end": 147.432,
       "title": "One verified chain, online.",
       "shortTitle": "Complete online chain",
       "kicker": "Three PiPER tasks",
@@ -625,8 +633,8 @@
     },
     {
       "id": "policy",
-      "start": 147.12,
-      "end": 163.632,
+      "start": 147.432,
+      "end": 163.944,
       "title": "Better state. The same policy.",
       "shortTitle": "Same-policy manipulation",
       "kicker": "240 paired real-robot episodes",
@@ -697,8 +705,8 @@
     },
     {
       "id": "closing",
-      "start": 163.632,
-      "end": 173.88,
+      "start": 163.944,
+      "end": 174.192,
       "title": "Propose. Verify. Synchronize.",
       "shortTitle": "Reusable interface",
       "kicker": "KineSync-GS",

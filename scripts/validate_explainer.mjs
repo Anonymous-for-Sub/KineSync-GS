@@ -19,5 +19,5 @@ for(const s of m.scenes){
 }
 assert.ok(Math.abs(end-m.duration)<1e-5);
 assert.equal(hashes.size,m.audio.recordings);
-for(const f of ['explainer.html','NARRATION.md','static/data/explainer-timeline.json','static/js/tour-player.mjs','static/js/tour-scenes.mjs'])assert.ok(!/[\u4e00-\u9fff]/.test(await readFile(path.join(root,f),'utf8')),`Non-English text in ${f}`);
+for(const f of ['explainer.html','NARRATION.md','static/data/explainer-timeline.json','static/js/tour-player.mjs','static/js/tour-composition.mjs','static/js/tour-robot.mjs'])assert.ok(!/[\u4e00-\u9fff]/.test(await readFile(path.join(root,f),'utf8')),`Non-English text in ${f}`);
 console.log(`Validated ${m.scenes.length} chapters, ${m.duration.toFixed(3)} seconds, ${hashes.size} unique recordings, sentence cues and media.`);
