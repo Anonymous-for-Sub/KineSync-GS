@@ -15,7 +15,7 @@ const check=(x,y,c=C.green)=>`<path d="M${x-7},${y} l5,5 l10,-12" stroke="${c}" 
 
 // The SVG, recorded media and interactive robot share this coordinate system.
 export const layouts={
- 'real2sim2real':{robots:[{x:0,y:55,w:445,h:365},{x:755,y:55,w:445,h:365}],media:[{x:385,y:303,w:430,h:243}],asset:'primary'},
+ 'real2sim2real':{robots:[{x:20,y:85,w:338,h:350},{x:842,y:85,w:338,h:350}],media:[{x:385,y:303,w:430,h:243}],asset:'primary'},
  failure:{robots:[{x:650,y:115,w:505,h:370}],media:[{x:28,y:118,w:550,h:326}],asset:'motivation'},
  contract:{robots:[{x:870,y:133,w:310,h:282}],media:[]},
  spatial:{robots:[{x:15,y:50,w:530,h:410}],media:[{x:630,y:300,w:540,h:230}],asset:'primary'},
@@ -36,13 +36,14 @@ export function evidenceFor(scene){const l=layouts[scene.id];if(l.asset==='piper
 
 function opening(p,o){
  const t=phase(p,.04,.9),q=[.42*Math.sin(t*4.08),.2*Math.sin(t*Math.PI),0,-.26*Math.sin(t*Math.PI),0,.18*Math.sin(t*Math.PI),0];
- let s=txt(57,48,'Articulated geometry',26,C.cadet,600)+txt(826,48,'Gaussian appearance',26,C.seal,600);
+ let s='<rect class="opening-world" x="8" y="12" width="362" height="490" rx="8" fill="none" stroke="#aabac0" stroke-width="2"/><rect class="opening-world" x="830" y="12" width="362" height="490" rx="8" fill="none" stroke="#cc9e4c" stroke-width="2"/>';
+ s+=txt(189,48,'Articulated geometry',25,C.cadet,600,'middle')+txt(1011,48,'Gaussian appearance',25,C.seal,600,'middle');
  s+=rect(523,94,154,62,'#edf3ef')+txt(600,135,'q(t)',31,C.green,600,'middle');
  s+=arrow(520,127,418,185,phase(p,.06,.24),C.cadet)+arrow(680,127,782,185,phase(p,.06,.24),C.gold);
  const motion=observationMotion(o.motionTime??0,0,o.reducedMotion);
  s+=fade(packet(520,127,418,185,1-motion.travel,C.cadet)+packet(680,127,782,185,1-motion.travel,C.gold),motion.opacity);
  q.forEach((v,i)=>{s+=line(517+i*25,190,517+i*25,232,C.line,4)+line(517+i*25,211,517+i*25,211-v*45,i%2?C.gold:C.cadet,7);});
- return s+txt(600,275,'Real-world observations',23,C.ink,550,'middle')+fade(txt(206,470,'Same articulation',24,C.cadet,550,'middle')+txt(998,470,'Same timestamp',24,C.seal,550,'middle'),phase(p,.55,.85));
+ return s+txt(600,275,'Real-world observations',23,C.ink,550,'middle')+fade(txt(189,470,'Same articulation',24,C.cadet,550,'middle')+txt(1011,470,'Same timestamp',24,C.seal,550,'middle'),phase(p,.55,.85));
 }
 function failure(p){return txt(35,65,'Observed during inverse rendering',25,C.ink,550)+circle(698,73,7,C.cadet)+txt(717,81,'Current image',23,C.cadet,550)+circle(960,73,7,C.gold)+txt(979,81,'Delayed image',23,C.gold,550)+fade(rect(35,478,530,62,'#f5efea')+txt(300,516,'Image error ↓   Joint error ↑',28,C.seal,600,'middle'),phase(p,.15,.85))+circle(710,519,7,C.cadet)+txt(728,526,'Measured',23,C.cadet,550)+circle(949,519,7,C.gold)+txt(967,526,'Fitted',23,C.seal,550);}
 function contract(p,o){

@@ -125,3 +125,10 @@ estimates; robot states, decision rules, recordings and reported results are unc
 
 Checks cover deterministic motion, reduced motion, pause/seek canvas pixels,
 desktop/mobile layouts and all eleven narrated chapters.
+
+## Opening clarity (4.5)
+
+The opening right-hand twin displays its Gaussian surface from the first frame,
+while the left remains mesh-based. Each robot/camera view has its own outlined
+region, separate from the central recording. Only opening framing and its initial
+appearance change; later chapters and narration retain their existing behavior.

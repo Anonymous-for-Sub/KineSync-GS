@@ -117,7 +117,7 @@ export class RobotStage{
   this.views.forEach((view,i)=>{
    const slot=slots[i];view.target.hidden=!slot;view.bounds=slot;if(!slot)return;
    const cameraScene=['real2sim2real','failure','spatial'].includes(id);
-   view.camera.zoom=id==='failure'?.76:cameraScene?.86:1;
+   view.camera.zoom=id==='real2sim2real'?.72:id==='failure'?.76:cameraScene?.86:1;
    view.cameras.forEach((c,j)=>{c.visible=cameraScene&&(id!=='real2sim2real'||j===0);});
    view.cameras.forEach((c,j)=>{
     const m=observationMotion(options.motionTime??0,j*.35,options.reducedMotion),capture=c.userData.capture;
@@ -138,7 +138,7 @@ export class RobotStage{
     splat=.6;
     this.canvas.dataset.verification=v.stage;
    }
-   if(id==='real2sim2real')splat=i===0?0:phase(p,.24,.67);
+   if(id==='real2sim2real')splat=i===0?0:1;
    if(id==='closing')splat=.58;
    const gripper=['spatial','contract','failure'].includes(id)?.022:.022+.014*Math.sin(motion*Math.PI);
    q.forEach((value,j)=>view.robot.setJointValue('panda_joint'+(j+1),value));view.robot.setJointValue('panda_finger_joint1',gripper);

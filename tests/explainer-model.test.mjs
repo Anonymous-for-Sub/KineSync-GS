@@ -4,6 +4,18 @@ import {bounded,spatial,verificationState,qMeasured,lagSearch,locate,cueAt,visua
 import {renderScene,sceneIds,layouts} from '../docs/static/js/tour-composition.mjs';
 import * as motionMath from '../docs/static/js/tour-math.mjs';
 
+test('opening frames isolate both robot views from recorded media',()=>{
+ const svg=renderScene('real2sim2real',0,{motionTime:0});
+ assert.equal((svg.match(/class="opening-world"/g)||[]).length,2);
+ const media=layouts.real2sim2real.media[0];
+ for(const robot of layouts.real2sim2real.robots){
+  assert.ok(robot.x+robot.w<=media.x||robot.x>=media.x+media.w);
+ }
+ for(const id of sceneIds.filter(id=>id!=='real2sim2real')){
+  assert.ok(!renderScene(id,.5,{}).includes('opening-world'));
+ }
+});
+
 test('observation motion is seekable, bounded and disabled by reduced-motion preference',()=>{
  assert.equal(typeof motionMath.observationMotion,'function');
  const f=motionMath.observationMotion;
