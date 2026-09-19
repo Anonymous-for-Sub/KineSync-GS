@@ -28,6 +28,10 @@ export function verificationState(p,conflict=false){
   const publication=assessed&&evidence.pass?phase(p,.65,.86):0;
   return {...evidence,assessed,publication,stage:p<.44?'proposal':!assessed?'evidence':evidence.pass?'commit':'fallback'};
 }
+export function observationMotion(seconds,offset=0,reducedMotion=false){
+ const cycle=((Math.max(0,seconds)*.45+offset)%1+1)%1;
+ return {travel:1-.86*ease(cycle),opacity:reducedMotion?0:Math.sin(Math.PI*cycle)**2,scan:cycle};
+}
 export function signal(t){return Math.exp(-(((t-1.1)/.28)**2))+.65*Math.exp(-(((t-2.35)/.48)**2))+.3*Math.exp(-(((t-3.3)/.15)**2));}
 export function correlation(lag,shift){
   const a=[],b=[];for(let i=0;i<100;i++){const t=.8+i*.022;a.push(signal(t));b.push(signal(t+lag-shift));}

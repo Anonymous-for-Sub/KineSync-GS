@@ -2,6 +2,23 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {bounded,spatial,verificationState,qMeasured,lagSearch,locate,cueAt,visualProgress} from '../docs/static/js/tour-math.mjs';
 import {renderScene,sceneIds,layouts} from '../docs/static/js/tour-composition.mjs';
+import * as motionMath from '../docs/static/js/tour-math.mjs';
+
+test('observation motion is seekable, bounded and disabled by reduced-motion preference',()=>{
+ assert.equal(typeof motionMath.observationMotion,'function');
+ const f=motionMath.observationMotion;
+ for(const t of [0,.2,1,2.5,50]){
+  const m=f(t);assert.ok(m.travel>=0&&m.travel<=1);assert.ok(m.opacity>=0&&m.opacity<=1);
+  assert.deepEqual(f(t),m);assert.equal(f(t,0,true).opacity,0);
+ }
+ assert.notDeepEqual(f(.4),f(1.1));assert.notDeepEqual(f(.4),f(.4,.35));
+});
+
+test('flow animation changes with the narration clock but respects reduced motion',()=>{
+ const a=renderScene('contract',.8,{motionTime:.4}),b=renderScene('contract',.8,{motionTime:1.1});
+ assert.notEqual(a,b);
+ assert.equal(renderScene('contract',.8,{motionTime:.4,reducedMotion:true}),renderScene('contract',.8,{motionTime:1.1,reducedMotion:true}));
+});
 
 test('robot and evidence regions stay inside the shared stage',()=>{
  for(const id of sceneIds)for(const r of [...layouts[id].robots,...layouts[id].media]){

@@ -1,5 +1,5 @@
-import {clamp,locate,cueAt,visualProgress} from './tour-math.mjs?v=4.2';
-import {renderScene,layouts,evidenceFor} from './tour-composition.mjs?v=4.3';
+import {clamp,locate,cueAt,visualProgress} from './tour-math.mjs?v=4.4';
+import {renderScene,layouts,evidenceFor} from './tour-composition.mjs?v=4.4';
 
 const $=id=>document.getElementById(id);
 const manifest=await fetch('static/data/explainer-timeline.json?v=4').then(r=>{if(!r.ok)throw new Error('Timeline unavailable');return r.json();});
@@ -27,12 +27,14 @@ let media=[],robot=null,inspection=null,lastDraw=-1,frame=0,lastMarkup='',lastSu
 const clock=t=>`${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;
 const icon=(id,name)=>$(id).src=`static/icons/${name}.svg`;
 const options=()=>inspection||{branch:'consistent',lag:.45};
+const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
 function draw(force=false){
   const scene=scenes[index];if(!scene)return;
   const p=inspection?.progress??(inspection?Math.max(.95,visualProgress(scene,local)):visualProgress(scene,local));
-  const markup=renderScene(scene.id,p,options());
+  const visualOptions={...options(),motionTime:local,reducedMotion:motionPreference.matches};
+  const markup=renderScene(scene.id,p,visualOptions);
   if(markup!==lastMarkup||force){$('stage').innerHTML=markup;lastMarkup=markup;}
-  robot?.update(scene.id,p,options(),layouts[scene.id].robots);
+  robot?.update(scene.id,p,visualOptions,layouts[scene.id].robots);
   document.querySelectorAll('[data-representation]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.representation===inspection?.representation)));
   document.querySelectorAll('[data-branch]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.branch===(inspection?.branch||'consistent'))));
   const subtitle=cueAt(scene,local).text;
@@ -136,7 +138,7 @@ function tick(now){
   const duration=scenes[index].end-scenes[index].start;
   time=scenes[index].start+clamp(local,0,duration);
   if(!audio[index]&&local>=duration){advance();return;}
-  if(now-lastDraw>32){draw();lastDraw=now;}
+  if(now-lastDraw>1000/45){draw();lastDraw=now;}
 }
 $('duration').textContent=clock(manifest.duration);$('timeline').max=manifest.duration;
 scenes.forEach((scene,i)=>{
@@ -161,6 +163,7 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
 window.addEventListener('pagehide',()=>{pause();cancelAnimationFrame(frame);robot?.dispose();objectUrls.forEach(url=>URL.revokeObjectURL(url));});
 const requested=Number(new URLSearchParams(location.search).get('t')||0);seek(Number.isFinite(requested)?requested:0,false);frame=requestAnimationFrame(tick);
 window.kineSyncTour={seek,pause,play,get state(){return {index,time,local,playing,muted,audioTime:audio[index]?.currentTime??null,duration:manifest.duration};}};
+motionPreference.addEventListener('change',()=>draw(true));
 
 function openImage(evidence){
   pause();const dialog=document.createElement('dialog');dialog.className='media-dialog';
@@ -169,7 +172,7 @@ function openImage(evidence){
   dialog.append(close,img);document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.showModal();
 }
 try{
-  const {RobotStage}=await import('./tour-robot.mjs?v=4.3');
+  const {RobotStage}=await import('./tour-robot.mjs?v=4.4');
   robot=new RobotStage($('robot-canvas'),$('scene-surface'),pause);draw(true);
   await robot.loadPromise;draw(true);
 }catch(error){

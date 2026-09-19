@@ -111,3 +111,17 @@ Selected surface kernels have emphasized elliptical contours to make anisotropy
 legible at presentation scale. These display accents do not alter the experimental
 media or the underlying joint states. The header uses the project's Bistre and
 gold palette. Narration and timing remain unchanged.
+
+## Clock-linked animation refinement (4.4)
+
+Observation volumes show traveling capture planes, while an emphasis band moves
+over the link-bound Gaussian surface. Diagram packets connect proposals, evidence
+and the selected publication or fallback branch. Temporal event cursors and
+asynchronous input streams make the observation-to-state sequence visible.
+All accents use narration-local time: pause freezes them and seeking restores
+the same display state. Reduced-motion preferences disable supplemental scanning
+and packet effects. These are teaching accents, not new measurements or confidence
+estimates; robot states, decision rules, recordings and reported results are unchanged.
+
+Checks cover deterministic motion, reduced motion, pause/seek canvas pixels,
+desktop/mobile layouts and all eleven narrated chapters.

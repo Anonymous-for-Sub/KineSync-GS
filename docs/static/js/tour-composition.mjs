@@ -1,4 +1,4 @@
-import {C,clamp,mix,phase,verificationState,signal,lagSearch} from './tour-math.mjs?v=4.2';
+import {C,clamp,mix,phase,verificationState,signal,lagSearch,observationMotion} from './tour-math.mjs?v=4.4';
 
 const txt=(x,y,s,size=22,color=C.ink,weight=500,anchor='start')=>`<text x="${x}" y="${y}" fill="${color}" font-size="${size}" font-weight="${weight}" text-anchor="${anchor}">${s}</text>`;
 const rect=(x,y,w,h,fill=C.cool,stroke='none',r=7)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${fill}" stroke="${stroke}"/>`;
@@ -34,12 +34,13 @@ export const extraMedia={
 };
 export function evidenceFor(scene){const l=layouts[scene.id];if(l.asset==='piper')return [scene.evidence,extraMedia.piper];if(extraMedia[l.asset])return [extraMedia[l.asset]];return scene.evidence?[scene.evidence]:[];}
 
-function opening(p){
+function opening(p,o){
  const t=phase(p,.04,.9),q=[.42*Math.sin(t*4.08),.2*Math.sin(t*Math.PI),0,-.26*Math.sin(t*Math.PI),0,.18*Math.sin(t*Math.PI),0];
  let s=txt(57,48,'Articulated geometry',26,C.cadet,600)+txt(826,48,'Gaussian appearance',26,C.seal,600);
  s+=rect(523,94,154,62,'#edf3ef')+txt(600,135,'q(t)',31,C.green,600,'middle');
  s+=arrow(520,127,418,185,phase(p,.06,.24),C.cadet)+arrow(680,127,782,185,phase(p,.06,.24),C.gold);
- s+=packet(520,127,418,185,(p*3)%1,C.cadet)+packet(680,127,782,185,(p*3)%1,C.gold);
+ const motion=observationMotion(o.motionTime??0,0,o.reducedMotion);
+ s+=fade(packet(520,127,418,185,1-motion.travel,C.cadet)+packet(680,127,782,185,1-motion.travel,C.gold),motion.opacity);
  q.forEach((v,i)=>{s+=line(517+i*25,190,517+i*25,232,C.line,4)+line(517+i*25,211,517+i*25,211-v*45,i%2?C.gold:C.cadet,7);});
  return s+txt(600,275,'Real-world observations',23,C.ink,550,'middle')+fade(txt(206,470,'Same articulation',24,C.cadet,550,'middle')+txt(998,470,'Same timestamp',24,C.seal,550,'middle'),phase(p,.55,.85));
 }
@@ -66,8 +67,11 @@ function spatialScene(p,o){
  s+=fade(txt(1153,250,v.d.toFixed(3),24,color,600,'end'),ev);
  return s+(v.assessed?(v.pass?check(631,270):line(624,263,638,277,C.seal,3)+line(638,263,624,277,C.seal,3)):'')+txt(653,278,v.assessed?(v.pass?'Commit whole state':'Retain measurement'):'Gather cross-view evidence',25,v.assessed?color:C.muted,600);
 }
+let cachedLag,cachedSearch;
 function temporal(p,o){
- const shift=o.lag??.45,aligned=o.aligned??phase(p,.52,.84),residual=shift*(1-aligned),search=lagSearch(shift);
+ const shift=o.lag??.45,aligned=o.aligned??phase(p,.52,.84),residual=shift*(1-aligned);
+ if(cachedLag!==shift){cachedLag=shift;cachedSearch=lagSearch(shift);}
+ const search=cachedSearch;
  const scan=phase(p,.08,.5),peak=search.best,peakX=646+(peak.lag+.8)/1.6*487;
  let s=txt(35,54,'Match motion, then resample state',25,C.ink,550);
  for(const t of [1.1,2.35,3.3]){
@@ -93,8 +97,9 @@ function controlled(p){let s=txt(36,55,'Whole-state joint error',25,C.ink,550)+t
 function mechanism(p){let s=txt(35,55,'Factorize calibration before recovery',25,C.ink,550)+rect(35,102,223,84,C.cool)+txt(146,137,'Shared joint',22,C.cadet,600,'middle')+txt(146,167,'calibration',22,C.cadet,600,'middle')+arrow(270,143,335,143,phase(p,.04,.22))+rect(352,87,225,56,'#f1f4f4')+txt(464,121,'Camera A residual',20,C.ink,500,'middle')+rect(352,161,225,56,'#f5efe5')+txt(464,195,'Camera B residual',20,C.ink,500,'middle')+arrow(140,209,140,255,phase(p,.18,.35))+txt(35,304,'Dual-view recovery',23,C.ink,550)+fade(txt(35,361,'42.86%',40,C.cadet,600)+arrow(202,345,272,345)+txt(299,361,'80.95%',43,C.seal,600),phase(p,.3,.52))+txt(35,420,'Successful proposals retained',23,C.ink,550);
  for(let i=0;i<18;i++)s+=circle(49+i%9*34,455+Math.floor(i/9)*34,10,p>.46+i*.02?(i<16?C.seal:'#dfe3df'):'#f0f1ef');return s+txt(370,489,'11 → 16 / 18',29,C.seal,600)+txt(665,64,'Matched calibration and update rules',25,C.ink,550)+txt(685,521,'Stronger evidence. More useful updates.',24,C.seal,550);}
 function realWorld(p){return txt(35,49,'Real PiPER observations',25,C.ink,550)+txt(673,61,'Recover the corresponding Gaussian state',24,C.seal,550)+arrow(603,235,653,235,phase(p,.2,.6))+nodes(36,438,['Head + wrist images','State proposal','Cross-view verification','Synchronized state'],p,1150)+fade(txt(600,542,'Replay joint error: 84.06 → 2.26 mrad',29,C.seal,600,'middle'),phase(p,.5,.85));}
-function online(p){let s=nodes(35,38,['Camera + telemetry','Temporal evidence','Spatial evidence','Verified publication'],p,1150)+txt(35,147,'Two streams, one timestamped state',26,C.ink,550);
- for(const [y,c,label] of [[218,C.gold,'Camera'],[304,C.cadet,'Telemetry']]){s+=txt(35,y-22,label,23,c,600)+line(38,y+15,552,y+15,C.line,2);for(let i=0;i<8;i++){const pos=(p*1.2+i/8)%1;s+=rect(38+pos*480,y,16,30,c,'none',3);}}
+function online(p,o){let s=nodes(35,38,['Camera + telemetry','Temporal evidence','Spatial evidence','Verified publication'],p,1150)+txt(35,147,'Two streams, one timestamped state',26,C.ink,550);
+ const time=o.reducedMotion?0:o.motionTime??p*12;
+ for(const [y,c,label,count,rate] of [[218,C.gold,'Camera',6,.13],[304,C.cadet,'Telemetry',10,.19]]){s+=txt(35,y-22,label,23,c,600)+line(38,y+15,552,y+15,C.line,2);for(let i=0;i<count;i++){const pos=(time*rate+i/count)%1;s+=rect(38+pos*480,y,16,30,c,'none',3);}}
  const rows=[['Raw state','11.67','42.72','0.00'],['Temporal only','6.08','66.38','0.76'],['Spatial only','6.21','64.17','0.91'],['Unguarded fusion','3.39','84.33','6.68'],['Component update','3.82','76.48','1.37'],['KineSync-GS','3.07','83.05','0.36']];
  s+=txt(651,198,'State input',20,C.muted)+txt(911,181,'qMAE',19,C.muted,500,'middle')+txt(911,207,'mrad ↓',18,C.muted,500,'middle')+txt(1028,181,'Recovery',19,C.muted,500,'middle')+txt(1028,207,'% ↑',18,C.muted,500,'middle')+txt(1140,181,'Harmful',19,C.muted,500,'middle')+txt(1140,207,'% ↓',18,C.muted,500,'middle');
  rows.forEach((r,i)=>{const y=227+i*43;s+=rect(639,y,542,39,i===5?'#e7d6c3':i%2?'#f2f4f3':'#fafbfa');[654,911,1028,1140].forEach((x,j)=>{s+=txt(x,y+26,r[j],20,i===5?C.seal:C.ink,i===5?650:450,j?'middle':'start');});});
@@ -102,5 +107,26 @@ function online(p){let s=nodes(35,38,['Camera + telemetry','Temporal evidence','
 function policy(p){return txt(36,57,'An unchanged manipulation policy',26,C.ink,550)+nodes(41,99,['State','Policy π','Action'],p,548)+txt(42,227,'Raw state',23,C.cadet,550)+rect(42,248,445*.5833*phase(p,.13,.4),36,C.cadet)+fade(txt(327,277,'58.33%',33,C.cadet,600),phase(p,.3,.4))+txt(42,345,'KineSync-GS state',23,C.seal,600)+rect(42,367,445*.7167*phase(p,.4,.68),36,C.seal)+fade(txt(387,396,'71.67%',35,C.seal,600),phase(p,.58,.68))+txt(640,68,'Real-robot task execution',25,C.ink,550)+fade(txt(600,502,'Better synchronized state improves manipulation.',31,C.seal,600,'middle')+txt(600,544,'240 paired real-robot episodes · same task and policy budget',22,C.muted,500,'middle'),phase(p,.65,.91));}
 function closing(p){return txt(35,56,'An articulated state interface',27,C.seal,600)+txt(736,92,'Across simulators and policies',25,C.ink,550)+arrow(452,264,666,264,phase(p,.05,.54),C.green)+rect(474,169,189,64,'#eaf2ec')+txt(568,211,'qˢ(t)',33,C.green,600,'middle')+fade(nodes(35,472,['Propose a correction','Evaluate evidence','Synchronize the twin'],p,1150),phase(p,.25,.6));}
 const SCENES={'real2sim2real':opening,failure,contract,spatial:spatialScene,temporal,controlled,mechanism,'real-world':realWorld,online,policy,closing};
-export function renderScene(id,p,o={}){return `<title>${id} synchronization explanation</title>${SCENES[id](clamp(p),o)}`;}
+function motionOverlay(id,p,o){
+ if(o.reducedMotion)return '';
+ const time=o.motionTime??0,motion=observationMotion(time),t=1-motion.travel;
+ const flow=(x,y,u,v,c=C.gold)=>fade(packet(x,y,u,v,t,c),motion.opacity);
+ let s='';
+ if(id==='contract'){
+  const v=verificationState(p,o.branch==='conflict');
+  if(p>.2)s+=flow(340,223,443,223);
+  if(p>.32&&!v.assessed)s+=`<path d="M590,119 L716,230 L590,341 L464,230 Z" fill="none" stroke="${C.gold}" stroke-width="4" stroke-dasharray="28 637" stroke-dashoffset="${-time*100}"/>`;
+  if(v.assessed)s+=v.pass?flow(718,230,883,230,C.green):flow(182,478,1020,478,C.cadet);
+ }
+ if(id==='mechanism'&&p>.15)s+=flow(270,143,335,143);
+ if(id==='closing'&&p>.15)s+=flow(452,264,666,264,C.green);
+ const row=id==='real-world'?[36,438,1150,4]:id==='online'?[35,38,1150,4]:id==='policy'?[41,99,548,3]:null;
+ if(row){const [x,y,w,n]=row;for(let i=0;i<n-1;i++)if(p>i*.18+.1)s+=flow(x+(i+1)*w/n-33,y+26,x+(i+1)*w/n-8,y+26,i===n-2?C.green:C.gold);}
+ if(id==='temporal'&&p>.12){
+  const residual=(o.lag??.45)*(1-(o.aligned??phase(p,.52,.84))),sample=motion.scan*4,x=45+motion.scan*505;
+  s+=fade(line(x,112,x,339,C.cadet,1,'4 5')+circle(x,192-signal(sample)*76,6,C.cadet)+circle(x,331-signal(sample-residual)*76,6,C.gold),motion.opacity*.8);
+ }
+ return `<g aria-hidden="true" class="signal-flow">${s}</g>`;
+}
+export function renderScene(id,p,o={}){p=clamp(p);return `<title>${id} synchronization explanation</title>${SCENES[id](p,o)}${motionOverlay(id,p,o)}`;}
 export const sceneIds=Object.keys(SCENES);

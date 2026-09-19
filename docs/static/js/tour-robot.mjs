@@ -3,7 +3,7 @@ import URDFLoader from '../vendor/urdf/URDFLoader.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {MeshSurfaceSampler} from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import {phase,verificationState} from './tour-math.mjs?v=4.2';
+import {phase,verificationState,observationMotion} from './tour-math.mjs?v=4.4';
 
 const HOME=[0,-.5,0,-2.15,0,1.72,.78];
 let seed=13;
@@ -36,9 +36,9 @@ function surfaceGaussians(mesh){
  for(const [name,array] of [['center',center],['axisU',axisU],['axisV',axisV],['tint',colors]])g.setAttribute(name,new T.InstancedBufferAttribute(new Float32Array(array),3));
  g.setAttribute('accent',new T.InstancedBufferAttribute(new Float32Array(accents),1));
  g.instanceCount=count;
- const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{opacity:{value:1}},
-  vertexShader:`attribute vec3 center,axisU,axisV,tint;attribute float accent; varying vec2 uvG; varying vec3 col;varying float emphasis; void main(){uvG=position.xy;col=tint;emphasis=accent;vec3 p=center+axisU*position.x+axisV*position.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
-  fragmentShader:`uniform float opacity;varying vec2 uvG;varying vec3 col;varying float emphasis;void main(){float r=length(uvG);float kernel=exp(-1.5*r*r);float contour=exp(-180.*(r-.95)*(r-.95))*emphasis*.7;float a=min(.95,(kernel*(1.-emphasis*.5)+contour)*opacity*(1.+emphasis*.4));if(a<.025)discard;gl_FragColor=vec4(col,a);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
+ const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{opacity:{value:1},scan:{value:0},scanStrength:{value:0}},
+  vertexShader:`attribute vec3 center,axisU,axisV,tint;attribute float accent; varying vec2 uvG; varying vec3 col;varying float emphasis,worldZ; void main(){uvG=position.xy;col=tint;emphasis=accent;vec3 p=center+axisU*position.x+axisV*position.y;worldZ=(modelMatrix*vec4(center,1.)).z;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+  fragmentShader:`uniform float opacity,scan,scanStrength;varying vec2 uvG;varying vec3 col;varying float emphasis,worldZ;void main(){float r=length(uvG);float dz=worldZ-(.05+.85*scan);float band=exp(-130.*dz*dz)*scanStrength;float kernel=exp(-1.5*r*r);float contour=exp(-180.*(r-.95)*(r-.95))*emphasis*.7;float a=min(.95,(kernel*(1.-emphasis*.5)+contour)*opacity*(1.+emphasis*.4)*(1.+band*.65));if(a<.025)discard;gl_FragColor=vec4(mix(col,vec3(.7,.42,.12),band*.4),a);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
  const splats=new T.Mesh(g,m);splats.frustumCulled=false;splats.renderOrder=2;splats.userData.gaussians=count;return splats;
 }
 
@@ -57,6 +57,10 @@ function observationCamera(color,position,lookAt){
  for(let i=0;i<4;i++)lines.push(0,0,.02,...corners[i],...corners[i],...corners[(i+1)%4]);
  const edges=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(lines,3)),new T.LineBasicMaterial({color,transparent:true,opacity:.58}));group.add(edges);
  const plane=new T.Mesh(new T.PlaneGeometry(w*2,h*2),new T.MeshBasicMaterial({color,transparent:true,opacity:.065,side:T.DoubleSide,depthWrite:false}));plane.position.z=reach;group.add(plane);
+ const capture=new T.Group();
+ const capturePlane=new T.Mesh(new T.PlaneGeometry(w*2,h*2),new T.MeshBasicMaterial({color,transparent:true,opacity:.12,side:T.DoubleSide,depthWrite:false}));
+ const captureEdge=new T.LineSegments(new T.EdgesGeometry(capturePlane.geometry),new T.LineBasicMaterial({color,transparent:true,opacity:.8}));
+ capture.add(capturePlane,captureEdge);group.add(capture);group.userData.capture={group:capture,plane:capturePlane,edge:captureEdge,reach};
  return group;
 }
 
@@ -115,6 +119,11 @@ export class RobotStage{
    const cameraScene=['real2sim2real','failure','spatial'].includes(id);
    view.camera.zoom=id==='failure'?.76:cameraScene?.86:1;
    view.cameras.forEach((c,j)=>{c.visible=cameraScene&&(id!=='real2sim2real'||j===0);});
+   view.cameras.forEach((c,j)=>{
+    const m=observationMotion(options.motionTime??0,j*.35,options.reducedMotion),capture=c.userData.capture;
+    capture.group.visible=c.visible&&m.opacity>.01;capture.group.position.z=capture.reach*m.travel;capture.group.scale.set(m.travel,m.travel,1);
+    capture.plane.material.opacity=.14*m.opacity;capture.edge.material.opacity=.75*m.opacity;
+   });
    this.canvas.dataset.cameras=String(view.cameras.filter(c=>c.visible).length);
    Object.assign(view.target.style,{left:slot.x/12+'%',top:slot.y/5.6+'%',width:slot.w/12+'%',height:slot.h/5.6+'%'});
    if(!this.ready)return;
@@ -142,7 +151,8 @@ export class RobotStage{
    const buildingGaussians=id==='real2sim2real'&&i===1&&!mode;
    const meshOpacity=buildingGaussians?1-phase(splat,.5,1):pureGaussians?0:1;
    view.meshes.forEach(mesh=>{mesh.material.transparent=meshOpacity<1;mesh.material.opacity=meshOpacity;mesh.material.depthWrite=meshOpacity>.2;});
-   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=pureGaussians?.94:buildingGaussians?.94*splat:.4*splat;});
+   const observation=observationMotion(options.motionTime??0,0,options.reducedMotion);
+   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=pureGaussians?.94:buildingGaussians?.94*splat:.4*splat;mesh.material.uniforms.scan.value=observation.scan;mesh.material.uniforms.scanStrength.value=options.reducedMotion?0:.85;});
    view.robot.updateMatrixWorld(true);
    view.ghost.visible=Boolean(ghostQ)&&ghostOpacity>.005;
    this.canvas.dataset.proposalOpacity=String(ghostQ?ghostOpacity:0);
