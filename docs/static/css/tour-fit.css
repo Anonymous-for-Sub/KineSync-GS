@@ -11,3 +11,6 @@
 .robot-interaction:focus-visible{outline:2px solid var(--gold);border-radius:7px}
 @keyframes media-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.stage-evidence{animation:none}#representation-controls button,#branch-controls button,.timing-mode button{transition:none}}
+.sitebar{margin:0;padding-left:4%;padding-right:4%;background:#442c1b;color:#fff7e9}
+.sitebar .brand{color:#f4dba6}.sitebar .brand img{background:#fff9f0;border-radius:6px;padding:3px}
+.sitebar nav a:hover{color:#f2c86d}.sitebar a:focus-visible{outline-color:#f2c86d}

@@ -101,3 +101,13 @@ recordings or narration timings have changed.
 Validation includes publication order, fallback invariance, representation
 switching, every caption at desktop/mobile widths, full narrated playback and
 pixel-level checks for articulated motion and display modes.
+
+## Camera and appearance refinement (4.3)
+
+The proposal overlay uses stronger gold translucency and link edges. Observation
+cameras now occupy the 3D scene with stereo-style bodies, lenses and view volumes;
+their positions illustrate multi-view observation and are not measured calibration.
+Selected surface kernels have emphasized elliptical contours to make anisotropy
+legible at presentation scale. These display accents do not alter the experimental
+media or the underlying joint states. The header uses the project's Bistre and
+gold palette. Narration and timing remain unchanged.

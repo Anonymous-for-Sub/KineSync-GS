@@ -10,7 +10,6 @@ const path=(a,c,w=3)=>`<path d="${a.map(([x,y],i)=>`${i?'L':'M'}${x.toFixed(2)},
 function vector(x,y,values,color,w=230,h=98){let s='';values.forEach((v,i)=>{const dx=x+i*w/values.length;s+=rect(dx,y,w/values.length-9,h,'#f0f3f3')+line(dx,y+h/2,dx+w/values.length-9,y+h/2,'#b8c6c9',1)+rect(dx+6,v>=0?y+h/2-v*h*2:y+h/2,w/values.length-21,Math.abs(v)*h*2,color,'none',2)+txt(dx+12,y+h+27,`q${i+1}`,18,C.muted);});return s;}
 const nodes=(x,y,labels,p,w=1120)=>labels.map((label,i)=>{const xx=x+i*w/labels.length;return fade(rect(xx,y,w/labels.length-40,53,i===labels.length-1?'#e6f0e8':'#f0f3f3')+txt(xx+(w/labels.length-40)/2,y+33,label,20,i===labels.length-1?C.green:C.ink,550,'middle'),.3+.7*phase(p,i*.18,i*.18+.2))+(i<labels.length-1?arrow(xx+w/labels.length-33,y+26,xx+w/labels.length-8,y+26,phase(p,i*.18,.2+i*.18)):'');}).join('');
 const metric=(x,y,value,label,color=C.seal,size=46)=>txt(x,y,value,size,color,650)+txt(x,y+33,label,20,C.muted);
-const cam=(x,y,name,c=C.cadet)=>rect(x,y,60,40,'#fff',c)+circle(x+30,y+20,12,c)+circle(x+30,y+20,6,'#fff')+txt(x+30,y-15,name,20,c,550,'middle');
 const packet=(x,y,u,v,p,c=C.gold)=>{const t=clamp(p);return circle(mix(x,u,t),mix(y,v,t),6,c);};
 const check=(x,y,c=C.green)=>`<path d="M${x-7},${y} l5,5 l10,-12" stroke="${c}" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
 
@@ -44,7 +43,7 @@ function opening(p){
  q.forEach((v,i)=>{s+=line(517+i*25,190,517+i*25,232,C.line,4)+line(517+i*25,211,517+i*25,211-v*45,i%2?C.gold:C.cadet,7);});
  return s+txt(600,275,'Real-world observations',23,C.ink,550,'middle')+fade(txt(206,470,'Same articulation',24,C.cadet,550,'middle')+txt(998,470,'Same timestamp',24,C.seal,550,'middle'),phase(p,.55,.85));
 }
-function failure(p){return txt(35,65,'Observed during inverse rendering',25,C.ink,550)+cam(735,79,'Current image')+cam(1020,79,'Delayed image',C.gold)+line(763,126,887,205,C.cadet,2,'6 5')+line(1050,126,967,205,C.gold,2,'6 5')+packet(763,126,887,205,(p*2)%1,C.cadet)+packet(1050,126,967,205,clamp((p*2)%1-.25),C.gold)+fade(rect(35,478,530,62,'#f5efea')+txt(300,516,'Image error ↓   Joint error ↑',28,C.seal,600,'middle'),phase(p,.15,.85))+circle(710,519,7,C.cadet)+txt(728,526,'Measured',23,C.cadet,550)+circle(949,519,7,C.gold)+txt(967,526,'Fitted',23,C.seal,550);}
+function failure(p){return txt(35,65,'Observed during inverse rendering',25,C.ink,550)+circle(698,73,7,C.cadet)+txt(717,81,'Current image',23,C.cadet,550)+circle(960,73,7,C.gold)+txt(979,81,'Delayed image',23,C.gold,550)+fade(rect(35,478,530,62,'#f5efea')+txt(300,516,'Image error ↓   Joint error ↑',28,C.seal,600,'middle'),phase(p,.15,.85))+circle(710,519,7,C.cadet)+txt(728,526,'Measured',23,C.cadet,550)+circle(949,519,7,C.gold)+txt(967,526,'Fitted',23,C.seal,550);}
 function contract(p,o){
  const v=verificationState(p,o.branch==='conflict'),ev=phase(p,.32,.56),decision=phase(p,.58,.78),color=v.pass?C.green:C.seal;
  let s=txt(35,59,'1  Propose',27,C.gold,600)+txt(445,59,'2  Verify',27,ev>.2?C.seal:C.cadet,600)+txt(914,59,'3  Synchronize',27,v.assessed?color:C.cadet,600);
@@ -60,8 +59,7 @@ function contract(p,o){
 }
 function spatialScene(p,o){
  const v=verificationState(p,o.branch==='conflict'),ev=phase(p,.25,.56),color=v.pass?C.green:C.seal;
- let s=cam(72,77,'View A')+cam(440,77,'View B',C.gold)+line(102,121,280,209,C.cadet,2,'6 5')+line(470,121,358,209,C.gold,2,'6 5');
- s+=packet(280,209,102,121,phase(p,.12,.34),C.cadet)+packet(358,209,470,121,phase(p,.12,.34),C.gold);
+ let s=circle(88,62,7,C.cadet)+txt(106,70,'View A',23,C.cadet,550)+circle(371,62,7,C.gold)+txt(389,70,'View B',23,C.gold,550);
  s+=circle(80,508,6,C.cadet)+txt(96,516,'Synchronized state',22,C.ink,550)+circle(348,508,6,C.gold)+txt(364,516,'Proposal',22,C.gold,550);
  s+=txt(615,45,'Cross-view support for one proposal',25,C.ink,550)+fade(txt(619,91,'δA',23,C.cadet,600)+vector(661,73,v.a,C.cadet,209,74)+txt(902,91,'δB',23,C.gold,600)+vector(944,73,v.b,C.gold,209,74),.18+.82*ev);
  s+=txt(619,213,'Disagreement',22)+rect(803,197,350,13,'#e9edef')+rect(803,197,350*v.d*ev,13,v.assessed?color:C.gold)+line(803+350*.42671,187,803+350*.42671,222,C.ink,2)+txt(803+350*.42671,250,'τd',20,C.muted,500,'middle');

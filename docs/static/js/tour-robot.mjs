@@ -14,7 +14,7 @@ const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294
 function surfaceGaussians(mesh){
  const sampler=new MeshSurfaceSampler(mesh).setRandomGenerator(random).build();
  const count=Math.min(2200,Math.max(120,Math.round(mesh.geometry.attributes.position.count/17)));
- const center=[],axisU=[],axisV=[],colors=[];
+ const center=[],axisU=[],axisV=[],colors=[],accents=[];
  const p=new T.Vector3(),n=new T.Vector3(),u=new T.Vector3(),v=new T.Vector3();
  const material=Array.isArray(mesh.material)?mesh.material[0]:mesh.material;
  const base=material.color||new T.Color('#b4bbc0');
@@ -24,20 +24,40 @@ function surfaceGaussians(mesh){
   v.crossVectors(n,u).normalize();
   const a=random()*Math.PI,c=Math.cos(a),s=Math.sin(a),uu=u.clone().multiplyScalar(c).addScaledVector(v,s);
   v.multiplyScalar(c).addScaledVector(u,-s);u.copy(uu);
-  const size=.0035+random()*.004;
+  const accent=i%13===0?1:0;
+  const size=(.0035+random()*.004)*(accent?2.3:1);
   center.push(...p.addScaledVector(n,.0008).toArray());axisU.push(...u.multiplyScalar(size*1.55).toArray());axisV.push(...v.multiplyScalar(size*.8).toArray());
-  const tint=base.clone().lerp(new T.Color(i%5===0?'#b47a25':'#697f8b'),.53);
+  const tint=accent?new T.Color(i%2?'#cc9e4c':'#587c8c'):base.clone().lerp(new T.Color('#697f8b'),.48);
   tint.multiplyScalar(.43+.57*Math.max(0,n.dot(new T.Vector3(.4,-.65,.65).normalize())));
-  colors.push(...tint.toArray());
+  colors.push(...tint.toArray());accents.push(accent);
  }
  const g=new T.InstancedBufferGeometry();
  g.setAttribute('position',new T.Float32BufferAttribute([-2,-2,0,2,-2,0,2,2,0,-2,2,0],3));g.setIndex([0,1,2,0,2,3]);
  for(const [name,array] of [['center',center],['axisU',axisU],['axisV',axisV],['tint',colors]])g.setAttribute(name,new T.InstancedBufferAttribute(new Float32Array(array),3));
+ g.setAttribute('accent',new T.InstancedBufferAttribute(new Float32Array(accents),1));
  g.instanceCount=count;
  const m=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{opacity:{value:1}},
-  vertexShader:`attribute vec3 center,axisU,axisV,tint; varying vec2 uvG; varying vec3 col; void main(){uvG=position.xy;col=tint;vec3 p=center+axisU*position.x+axisV*position.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
-  fragmentShader:`uniform float opacity;varying vec2 uvG;varying vec3 col;void main(){float a=exp(-1.5*dot(uvG,uvG))*opacity;if(a<.025)discard;gl_FragColor=vec4(col,a);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
+  vertexShader:`attribute vec3 center,axisU,axisV,tint;attribute float accent; varying vec2 uvG; varying vec3 col;varying float emphasis; void main(){uvG=position.xy;col=tint;emphasis=accent;vec3 p=center+axisU*position.x+axisV*position.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+  fragmentShader:`uniform float opacity;varying vec2 uvG;varying vec3 col;varying float emphasis;void main(){float r=length(uvG);float kernel=exp(-1.5*r*r);float contour=exp(-180.*(r-.95)*(r-.95))*emphasis*.7;float a=min(.95,(kernel*(1.-emphasis*.5)+contour)*opacity*(1.+emphasis*.4));if(a<.025)discard;gl_FragColor=vec4(col,a);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace(';#include',';\n#include')});
  const splats=new T.Mesh(g,m);splats.frustumCulled=false;splats.renderOrder=2;splats.userData.gaussians=count;return splats;
+}
+
+// Camera bodies and view volumes illustrate the observation geometry, not calibration.
+function observationCamera(color,position,lookAt){
+ const group=new T.Group();group.position.set(...position);group.up.set(0,0,1);group.lookAt(new T.Vector3(...lookAt));
+ const body=new T.Mesh(new T.BoxGeometry(.16,.065,.044),new T.MeshStandardMaterial({color:0x333a3d,roughness:.5}));body.position.z=-.025;group.add(body);
+ const rim=new T.LineSegments(new T.EdgesGeometry(body.geometry),new T.LineBasicMaterial({color}));body.add(rim);
+ for(const x of [-.053,.053]){
+  const lens=new T.Mesh(new T.CylinderGeometry(.021,.024,.016,24),new T.MeshStandardMaterial({color:0x172d39,metalness:.45,roughness:.22}));lens.rotation.x=Math.PI/2;lens.position.set(x,0,.006);group.add(lens);
+  const ring=new T.Mesh(new T.TorusGeometry(.023,.003,6,24),new T.MeshBasicMaterial({color}));ring.position.set(x,0,.015);group.add(ring);
+ }
+ const led=new T.Mesh(new T.SphereGeometry(.005,8,6),new T.MeshBasicMaterial({color}));led.position.set(0,.018,.003);group.add(led);
+ const reach=group.position.distanceTo(new T.Vector3(...lookAt)),w=reach*.24,h=w*.64;
+ const corners=[[-w,-h,reach],[w,-h,reach],[w,h,reach],[-w,h,reach]],lines=[];
+ for(let i=0;i<4;i++)lines.push(0,0,.02,...corners[i],...corners[i],...corners[(i+1)%4]);
+ const edges=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(lines,3)),new T.LineBasicMaterial({color,transparent:true,opacity:.58}));group.add(edges);
+ const plane=new T.Mesh(new T.PlaneGeometry(w*2,h*2),new T.MeshBasicMaterial({color,transparent:true,opacity:.065,side:T.DoubleSide,depthWrite:false}));plane.position.z=reach;group.add(plane);
+ return group;
 }
 
 export class RobotStage{
@@ -64,7 +84,9 @@ export class RobotStage{
   const displacement=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(),new T.Vector3()]),new T.LineDashedMaterial({color:0xcc9e4c,dashSize:.009,gapSize:.006,transparent:true,opacity:.9,depthTest:false}));
   const markers=[0x8b9ea5,0xcc9e4c].map(color=>new T.Mesh(new T.SphereGeometry(.007,12,8),new T.MeshBasicMaterial({color,depthTest:false})));
   scene.add(displacement,...markers);displacement.visible=false;markers.forEach(m=>m.visible=false);
-  return {scene,camera,controls,target,robot:null,meshes:[],splats:[],bounds:null,ghost:null,ghostMaterials:[],displacement,markers};
+  const cameras=[observationCamera(0x638692,[-.32,-.27,.8],[.22,0,.55]),observationCamera(0xcc9e4c,[.62,.24,.83],[.22,0,.55])];
+  scene.add(...cameras);cameras.forEach(c=>c.visible=false);
+  return {scene,camera,controls,target,robot:null,meshes:[],splats:[],bounds:null,ghost:null,ghostMaterials:[],ghostEdges:[],displacement,markers,cameras};
  }
  async load(){
   const manager=new T.LoadingManager();const gltf=new GLTFLoader(manager);const loader=new URDFLoader(manager);
@@ -75,7 +97,10 @@ export class RobotStage{
    seed=13;
    const robot=loaded.clone();view.robot=robot;view.scene.add(robot);
    view.ghost=loaded.clone();view.scene.add(view.ghost);view.ghost.visible=false;
-   view.ghost.traverse(o=>{if(o.isMesh){o.material=new T.MeshBasicMaterial({color:0xcc9e4c,transparent:true,opacity:.17,depthWrite:false});view.ghostMaterials.push(o.material);}});
+   view.ghost.traverse(o=>{if(o.isMesh){
+    o.material=new T.MeshBasicMaterial({color:0xcc9e4c,transparent:true,opacity:.46,depthWrite:false,depthTest:false});o.renderOrder=4;view.ghostMaterials.push(o.material);
+    const edge=new T.LineSegments(new T.EdgesGeometry(o.geometry,42),new T.LineBasicMaterial({color:0xa16a15,transparent:true,opacity:.8,depthTest:false}));edge.renderOrder=5;o.add(edge);view.ghostEdges.push(edge.material);
+   }});
    const meshes=[];robot.traverse(o=>{if(o.isMesh)meshes.push(o);});
    for(const mesh of meshes){mesh.material=mesh.material.clone();view.meshes.push(mesh);const splats=surfaceGaussians(mesh);mesh.add(splats);view.splats.push(splats);}
   }
@@ -87,7 +112,10 @@ export class RobotStage{
   this.last=[id,p,options,slots];this.active=slots.length>0;this.canvas.hidden=!this.active;
   this.views.forEach((view,i)=>{
    const slot=slots[i];view.target.hidden=!slot;view.bounds=slot;if(!slot)return;
-   view.camera.zoom=id==='failure'?.8:1;
+   const cameraScene=['real2sim2real','failure','spatial'].includes(id);
+   view.camera.zoom=id==='failure'?.76:cameraScene?.86:1;
+   view.cameras.forEach((c,j)=>{c.visible=cameraScene&&(id!=='real2sim2real'||j===0);});
+   this.canvas.dataset.cameras=String(view.cameras.filter(c=>c.visible).length);
    Object.assign(view.target.style,{left:slot.x/12+'%',top:slot.y/5.6+'%',width:slot.w/12+'%',height:slot.h/5.6+'%'});
    if(!this.ready)return;
    let q=[...HOME],splat=.0,ghostQ=null,ghostOpacity=.19,ghostColor=0xcc9e4c;
@@ -97,7 +125,7 @@ export class RobotStage{
     const v=verificationState(p,options.branch==='conflict');
     q=HOME.map((value,j)=>value+(v.delta[j]||0)*v.publication);
     ghostQ=HOME.map((value,j)=>value+(v.delta[j]||0));
-    ghostOpacity=.26*phase(p,.06,.3)*(v.pass?1-phase(p,.87,.98):1);
+    ghostOpacity=.48*phase(p,.06,.3)*(v.pass?1-phase(p,.87,.98):1);
     splat=.6;
     this.canvas.dataset.verification=v.stage;
    }
@@ -114,13 +142,15 @@ export class RobotStage{
    const buildingGaussians=id==='real2sim2real'&&i===1&&!mode;
    const meshOpacity=buildingGaussians?1-phase(splat,.5,1):pureGaussians?0:1;
    view.meshes.forEach(mesh=>{mesh.material.transparent=meshOpacity<1;mesh.material.opacity=meshOpacity;mesh.material.depthWrite=meshOpacity>.2;});
-   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=pureGaussians?.94:buildingGaussians?.94*splat:.18*splat;});
+   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=pureGaussians?.94:buildingGaussians?.94*splat:.4*splat;});
    view.robot.updateMatrixWorld(true);
    view.ghost.visible=Boolean(ghostQ)&&ghostOpacity>.005;
+   this.canvas.dataset.proposalOpacity=String(ghostQ?ghostOpacity:0);
    view.displacement.visible=view.ghost.visible;view.markers.forEach(m=>m.visible=view.ghost.visible);
    if(ghostQ){
     ghostQ.forEach((value,j)=>view.ghost.setJointValue('panda_joint'+(j+1),value));view.ghost.setJointValue('panda_finger_joint1',.022);view.ghost.updateMatrixWorld(true);
     view.ghostMaterials.forEach(m=>{m.opacity=ghostOpacity;m.color.setHex(ghostColor);});
+    view.ghostEdges.forEach(m=>{m.opacity=Math.min(.9,ghostOpacity*1.8);m.color.setHex(id==='failure'?0x638692:0xa16a15);});
     const a=view.robot.links.panda_hand.getWorldPosition(new T.Vector3()),b=view.ghost.links.panda_hand.getWorldPosition(new T.Vector3());
     const positions=view.displacement.geometry.attributes.position;positions.setXYZ(0,a.x,a.y,a.z);positions.setXYZ(1,b.x,b.y,b.z);positions.needsUpdate=true;view.displacement.computeLineDistances();
     view.markers[0].position.copy(a);view.markers[1].position.copy(b);

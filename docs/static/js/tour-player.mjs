@@ -1,5 +1,5 @@
 import {clamp,locate,cueAt,visualProgress} from './tour-math.mjs?v=4.2';
-import {renderScene,layouts,evidenceFor} from './tour-composition.mjs?v=4.2';
+import {renderScene,layouts,evidenceFor} from './tour-composition.mjs?v=4.3';
 
 const $=id=>document.getElementById(id);
 const manifest=await fetch('static/data/explainer-timeline.json?v=4').then(r=>{if(!r.ok)throw new Error('Timeline unavailable');return r.json();});
@@ -169,7 +169,7 @@ function openImage(evidence){
   dialog.append(close,img);document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.showModal();
 }
 try{
-  const {RobotStage}=await import('./tour-robot.mjs?v=4.2');
+  const {RobotStage}=await import('./tour-robot.mjs?v=4.3');
   robot=new RobotStage($('robot-canvas'),$('scene-surface'),pause);draw(true);
   await robot.loadPromise;draw(true);
 }catch(error){
