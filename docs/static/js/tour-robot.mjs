@@ -3,7 +3,7 @@ import URDFLoader from '../vendor/urdf/URDFLoader.js';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {MeshSurfaceSampler} from 'three/examples/jsm/math/MeshSurfaceSampler.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
-import {clamp,phase,mix,spatial} from './tour-math.mjs';
+import {phase,verificationState} from './tour-math.mjs?v=4.2';
 
 const HOME=[0,-.5,0,-2.15,0,1.72,.78];
 let seed=13;
@@ -13,7 +13,7 @@ const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294
 // transforms the Gaussian centers and tangent axes together with their link.
 function surfaceGaussians(mesh){
  const sampler=new MeshSurfaceSampler(mesh).setRandomGenerator(random).build();
- const count=Math.min(1800,Math.max(90,Math.round(mesh.geometry.attributes.position.count/22)));
+ const count=Math.min(2200,Math.max(120,Math.round(mesh.geometry.attributes.position.count/17)));
  const center=[],axisU=[],axisV=[],colors=[];
  const p=new T.Vector3(),n=new T.Vector3(),u=new T.Vector3(),v=new T.Vector3();
  const material=Array.isArray(mesh.material)?mesh.material[0]:mesh.material;
@@ -24,9 +24,9 @@ function surfaceGaussians(mesh){
   v.crossVectors(n,u).normalize();
   const a=random()*Math.PI,c=Math.cos(a),s=Math.sin(a),uu=u.clone().multiplyScalar(c).addScaledVector(v,s);
   v.multiplyScalar(c).addScaledVector(u,-s);u.copy(uu);
-  const size=.004+random()*.005;
+  const size=.0035+random()*.004;
   center.push(...p.addScaledVector(n,.0008).toArray());axisU.push(...u.multiplyScalar(size*1.55).toArray());axisV.push(...v.multiplyScalar(size*.8).toArray());
-  const tint=base.clone().lerp(new T.Color(i%5===0?'#b47a25':'#697f8b'),.68);
+  const tint=base.clone().lerp(new T.Color(i%5===0?'#b47a25':'#697f8b'),.53);
   tint.multiplyScalar(.43+.57*Math.max(0,n.dot(new T.Vector3(.4,-.65,.65).normalize())));
   colors.push(...tint.toArray());
  }
@@ -61,7 +61,10 @@ export class RobotStage{
   const controls=new OrbitControls(camera,target);controls.target.set(.15,0,.43);controls.enablePan=false;controls.enableDamping=false;controls.minDistance=1.2;controls.maxDistance=4;controls.minPolarAngle=.15;controls.maxPolarAngle=Math.PI*.49;controls.update();
   controls.addEventListener('start',()=>this.onChange?.());controls.addEventListener('change',()=>this.paint());
   target.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();e.stopPropagation();this.onChange?.();const relative=camera.position.clone().sub(controls.target);relative.applyAxisAngle(new T.Vector3(0,0,1),e.key==='ArrowLeft'?.15:-.15);camera.position.copy(relative.add(controls.target));controls.update();});
-  return {scene,camera,controls,target,robot:null,meshes:[],splats:[],bounds:null};
+  const displacement=new T.Line(new T.BufferGeometry().setFromPoints([new T.Vector3(),new T.Vector3()]),new T.LineDashedMaterial({color:0xcc9e4c,dashSize:.009,gapSize:.006,transparent:true,opacity:.9,depthTest:false}));
+  const markers=[0x8b9ea5,0xcc9e4c].map(color=>new T.Mesh(new T.SphereGeometry(.007,12,8),new T.MeshBasicMaterial({color,depthTest:false})));
+  scene.add(displacement,...markers);displacement.visible=false;markers.forEach(m=>m.visible=false);
+  return {scene,camera,controls,target,robot:null,meshes:[],splats:[],bounds:null,ghost:null,ghostMaterials:[],displacement,markers};
  }
  async load(){
   const manager=new T.LoadingManager();const gltf=new GLTFLoader(manager);const loader=new URDFLoader(manager);
@@ -69,7 +72,10 @@ export class RobotStage{
   let loaded;const complete=new Promise((resolve,reject)=>{manager.onLoad=resolve;manager.onError=url=>reject(new Error('Robot asset unavailable: '+url));});
   loaded=await loader.loadAsync('static/models/panda/panda.urdf');await complete;
   for(const view of this.views){
+   seed=13;
    const robot=loaded.clone();view.robot=robot;view.scene.add(robot);
+   view.ghost=loaded.clone();view.scene.add(view.ghost);view.ghost.visible=false;
+   view.ghost.traverse(o=>{if(o.isMesh){o.material=new T.MeshBasicMaterial({color:0xcc9e4c,transparent:true,opacity:.17,depthWrite:false});view.ghostMaterials.push(o.material);}});
    const meshes=[];robot.traverse(o=>{if(o.isMesh)meshes.push(o);});
    for(const mesh of meshes){mesh.material=mesh.material.clone();view.meshes.push(mesh);const splats=surfaceGaussians(mesh);mesh.add(splats);view.splats.push(splats);}
   }
@@ -83,23 +89,43 @@ export class RobotStage{
    const slot=slots[i];view.target.hidden=!slot;view.bounds=slot;if(!slot)return;
    Object.assign(view.target.style,{left:slot.x/12+'%',top:slot.y/5.6+'%',width:slot.w/12+'%',height:slot.h/5.6+'%'});
    if(!this.ready)return;
-   let q=[...HOME],splat=.0;
+   let q=[...HOME],splat=.0,ghostQ=null,ghostOpacity=.19,ghostColor=0xcc9e4c;
    const motion=phase(p,.04,.92);q[0]+=.42*Math.sin(motion*Math.PI*1.3);q[1]+=.2*Math.sin(motion*Math.PI);q[3]-=.26*Math.sin(motion*Math.PI);q[5]+=.18*Math.sin(motion*Math.PI);
-   if(id==='failure'){q=[...HOME];const fit=phase(p,.2,.86);q[0]+=.30*fit;q[1]-=.32*fit;q[3]+=.25*fit;splat=.85;}
+   if(id==='failure'){q=[...HOME];const fit=phase(p,.2,.86);q[0]+=.30*fit;q[1]-=.32*fit;q[3]+=.25*fit;splat=.62;ghostQ=[...HOME];ghostColor=0x8b9ea5;ghostOpacity=.24*fit;}
    if(['spatial','contract'].includes(id)){
-    const v=spatial(phase(p,.1,.62),options.branch==='conflict');const d=(id==='contract'&&!v.pass)?v.delta.map(()=>0):v.delta;
-    q=HOME.map((value,j)=>value+(d[j]||0));splat=.85;
+    const v=verificationState(p,options.branch==='conflict');
+    q=HOME.map((value,j)=>value+(v.delta[j]||0)*v.publication);
+    ghostQ=HOME.map((value,j)=>value+(v.delta[j]||0));
+    ghostOpacity=.26*phase(p,.06,.3)*(v.pass?1-phase(p,.87,.98):1);
+    splat=.6;
+    this.canvas.dataset.verification=v.stage;
    }
    if(id==='real2sim2real')splat=i===0?0:phase(p,.24,.67);
-   if(id==='closing')splat=.75;
-   q.forEach((value,j)=>view.robot.setJointValue('panda_joint'+(j+1),value));view.robot.setJointValue('panda_finger_joint1',.022+.014*Math.sin(motion*Math.PI));
+   if(id==='closing')splat=.58;
+   const gripper=['spatial','contract','failure'].includes(id)?.022:.022+.014*Math.sin(motion*Math.PI);
+   q.forEach((value,j)=>view.robot.setJointValue('panda_joint'+(j+1),value));view.robot.setJointValue('panda_finger_joint1',gripper);
+   this.canvas.dataset.gripper=String(gripper);
    const mode=id==='real2sim2real'&&i===0?'mesh':options.representation;
    if(mode==='mesh')splat=0;
    if(mode==='gaussians')splat=1;
    if(mode==='overlay')splat=.7;
-   view.meshes.forEach(mesh=>{mesh.material.transparent=true;mesh.material.opacity=mode==='gaussians'?0:1-splat*.65;mesh.material.depthWrite=splat<.5;});
-   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=.92*splat;});
-   view.robot.updateMatrixWorld(true);this.canvas.dataset.joints=q.map(v=>v.toFixed(4)).join(',');
+   const pureGaussians=mode==='gaussians'||(id==='real2sim2real'&&i===1&&splat>.98);
+   const buildingGaussians=id==='real2sim2real'&&i===1&&!mode;
+   const meshOpacity=buildingGaussians?1-phase(splat,.5,1):pureGaussians?0:1;
+   view.meshes.forEach(mesh=>{mesh.material.transparent=meshOpacity<1;mesh.material.opacity=meshOpacity;mesh.material.depthWrite=meshOpacity>.2;});
+   view.splats.forEach(mesh=>{mesh.visible=splat>.01;mesh.material.uniforms.opacity.value=pureGaussians?.94:buildingGaussians?.94*splat:.18*splat;});
+   view.robot.updateMatrixWorld(true);
+   view.ghost.visible=Boolean(ghostQ)&&ghostOpacity>.005;
+   view.displacement.visible=view.ghost.visible;view.markers.forEach(m=>m.visible=view.ghost.visible);
+   if(ghostQ){
+    ghostQ.forEach((value,j)=>view.ghost.setJointValue('panda_joint'+(j+1),value));view.ghost.setJointValue('panda_finger_joint1',.022);view.ghost.updateMatrixWorld(true);
+    view.ghostMaterials.forEach(m=>{m.opacity=ghostOpacity;m.color.setHex(ghostColor);});
+    const a=view.robot.links.panda_hand.getWorldPosition(new T.Vector3()),b=view.ghost.links.panda_hand.getWorldPosition(new T.Vector3());
+    const positions=view.displacement.geometry.attributes.position;positions.setXYZ(0,a.x,a.y,a.z);positions.setXYZ(1,b.x,b.y,b.z);positions.needsUpdate=true;view.displacement.computeLineDistances();
+    view.markers[0].position.copy(a);view.markers[1].position.copy(b);
+    view.markers[0].material.color.setHex(id==='failure'?0xcc9e4c:0x8b9ea5);view.markers[1].material.color.setHex(ghostColor);
+   }
+   this.canvas.dataset.joints=q.map(v=>v.toFixed(4)).join(',');
   });this.paint();
  }
  paint(){

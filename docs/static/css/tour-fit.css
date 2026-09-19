@@ -2,3 +2,12 @@
 @media(min-width:1600px){#scene-surface{max-width:calc((100dvh - 380px)*2.142857)}}
 @media(max-width:900px){#scene-surface{max-width:none}}
 @media(max-width:600px){.scene-topline{height:auto;min-height:45px;gap:8px;flex-wrap:wrap}#representation-controls button{font-size:11px;padding:5px 7px}#scene-surface{max-width:none}}
+.stage-evidence{border:1px solid #dce2df;box-shadow:0 2px 7px #442c1b09;animation:media-enter .32s ease-out both}
+.stage-evidence img,.stage-evidence video{inset:4px;width:calc(100% - 8px);height:calc(100% - 8px);border-radius:4px}
+.stage-evidence:has(img):hover{border-color:var(--gold)}
+#stage text{font-variant-numeric:tabular-nums}
+#representation-controls button,#branch-controls button,.timing-mode button{transition:color .15s,background .15s}
+#representation-controls button:hover,#branch-controls button:hover,.timing-mode button:hover{color:var(--seal);background:#fff}
+.robot-interaction:focus-visible{outline:2px solid var(--gold);border-radius:7px}
+@keyframes media-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.stage-evidence{animation:none}#representation-controls button,#branch-controls button,.timing-mode button{transition:none}}

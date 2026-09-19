@@ -21,6 +21,13 @@ export function spatial(progress,conflict=false){
   const proposal=qMeasured.map((x,i)=>x+delta[i]);
   return {delta,a,b,d,r,pass,proposal,output:pass?proposal:[...qMeasured]};
 }
+// One seekable clock controls fitting, evidence, and the displayed publication.
+export function verificationState(p,conflict=false){
+  const evidence=spatial(phase(p,.06,.44),conflict);
+  const assessed=p>=.58;
+  const publication=assessed&&evidence.pass?phase(p,.65,.86):0;
+  return {...evidence,assessed,publication,stage:p<.44?'proposal':!assessed?'evidence':evidence.pass?'commit':'fallback'};
+}
 export function signal(t){return Math.exp(-(((t-1.1)/.28)**2))+.65*Math.exp(-(((t-2.35)/.48)**2))+.3*Math.exp(-(((t-3.3)/.15)**2));}
 export function correlation(lag,shift){
   const a=[],b=[];for(let i=0;i<100;i++){const t=.8+i*.022;a.push(signal(t));b.push(signal(t+lag-shift));}

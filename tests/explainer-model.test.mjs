@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {bounded,spatial,qMeasured,lagSearch,locate,cueAt,visualProgress} from '../docs/static/js/tour-math.mjs';
+import {bounded,spatial,verificationState,qMeasured,lagSearch,locate,cueAt,visualProgress} from '../docs/static/js/tour-math.mjs';
 import {renderScene,sceneIds,layouts} from '../docs/static/js/tour-composition.mjs';
 
 test('robot and evidence regions stay inside the shared stage',()=>{
@@ -12,6 +12,16 @@ test('robot and evidence regions stay inside the shared stage',()=>{
 
 test('all proposed joint corrections respect the scalar bound',()=>{
  for(const z of [-100,-1,0,1,100])assert.ok(Math.abs(bounded([z])[0])<=.18);
+});
+test('publication follows evidence and never changes the conflict measurement',()=>{
+ for(const p of [0,.15,.4,.55]){
+  const v=verificationState(p);assert.equal(v.assessed,false);assert.equal(v.publication,0);
+ }
+ assert.equal(verificationState(.7).stage,'commit');assert.ok(verificationState(.7).publication>0);
+ assert.equal(verificationState(1).publication,1);
+ for(const p of [.1,.55,.6,.8,1])assert.equal(verificationState(p,true).publication,0);
+ assert.equal(verificationState(.8,true).stage,'fallback');
+ assert.deepEqual(verificationState(.4),verificationState(.4),'Seek is deterministic');
 });
 test('consistent views commit the complete proposal; stale evidence retains the entire measurement',()=>{
  const good=spatial(1,false),bad=spatial(1,true);

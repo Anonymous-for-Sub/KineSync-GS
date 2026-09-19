@@ -1,5 +1,5 @@
-import {clamp,locate,cueAt,visualProgress} from './tour-math.mjs';
-import {renderScene,layouts,evidenceFor} from './tour-composition.mjs';
+import {clamp,locate,cueAt,visualProgress} from './tour-math.mjs?v=4.2';
+import {renderScene,layouts,evidenceFor} from './tour-composition.mjs?v=4.2';
 
 const $=id=>document.getElementById(id);
 const manifest=await fetch('static/data/explainer-timeline.json?v=4').then(r=>{if(!r.ok)throw new Error('Timeline unavailable');return r.json();});
@@ -33,9 +33,12 @@ function draw(force=false){
   const markup=renderScene(scene.id,p,options());
   if(markup!==lastMarkup||force){$('stage').innerHTML=markup;lastMarkup=markup;}
   robot?.update(scene.id,p,options(),layouts[scene.id].robots);
+  document.querySelectorAll('[data-representation]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.representation===inspection?.representation)));
+  document.querySelectorAll('[data-branch]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.branch===(inspection?.branch||'consistent'))));
   const subtitle=cueAt(scene,local).text;
   if(subtitle!==lastSubtitle){$('subtitle').textContent=subtitle;lastSubtitle=subtitle;}
   $('time').textContent=clock(time);$('timeline').value=time;
+  $('timeline').setAttribute('aria-valuetext',`${clock(time)} of ${clock(manifest.duration)}: ${scene.title}`);
   for(const item of media)if(item instanceof HTMLVideoElement && Number.isFinite(item.duration)){
     const target=Math.min(local,Math.max(0,item.duration-.04));
     if(Math.abs(item.currentTime-target)>.4)item.currentTime=target;
@@ -62,6 +65,7 @@ function activate(next){
   $('lag').value=.45;$('lag-value').textContent='450 ms';
   document.querySelectorAll('[data-timing]').forEach(b=>b.setAttribute('aria-pressed','false'));
   $('stage-media').replaceChildren();media=[];
+  $('scene-surface').dataset.scene=scene.id;
   evidenceFor(scene).forEach((evidence,i)=>{
     const b=layouts[scene.id].media[i];if(!b)return;
     const figure=document.createElement('figure');figure.className='stage-evidence';
@@ -148,7 +152,7 @@ $('timeline').addEventListener('input',event=>seek(Number(event.target.value)));
 $('mute').addEventListener('click',()=>{muted=!muted;audio.forEach(a=>{if(a)a.muted=muted;});icon('mute-icon',muted?'volume-x':'volume-2');$('mute').setAttribute('aria-pressed',String(muted));$('mute').setAttribute('aria-label',muted?'Unmute narration':'Mute narration');$('mute').title=muted?'Unmute narration':'Mute narration';});
 $('fullscreen').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen();else $('presentation').requestFullscreen().catch(()=>{});});
 $('chapters-toggle').addEventListener('click',()=>{$('chapters').hidden=!$('chapters').hidden;$('chapters-toggle').setAttribute('aria-expanded',String(!$('chapters').hidden));});
-document.querySelectorAll('[data-branch]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={branch:button.dataset.branch,lag:.45};document.querySelectorAll('[data-branch]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
+document.querySelectorAll('[data-branch]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={branch:button.dataset.branch,lag:.45,representation:inspection?.representation};draw(true);}));
 $('lag').addEventListener('input',()=>{pause();const lag=Number($('lag').value);inspection={branch:'consistent',lag,aligned:inspection?.aligned??0};$('lag-value').textContent=`${Math.round(lag*1000)} ms`;document.querySelectorAll('[data-timing]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.timing==='aligned')===Boolean(inspection.aligned))));draw(true);});
 document.querySelectorAll('[data-timing]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={branch:'consistent',lag:Number($('lag').value),aligned:button.dataset.timing==='aligned'?1:0};document.querySelectorAll('[data-timing]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
 document.querySelectorAll('[data-representation]').forEach(button=>button.addEventListener('click',()=>{pause();inspection={...options(),progress:inspection?.progress??visualProgress(scenes[index],local),representation:button.dataset.representation};document.querySelectorAll('[data-representation]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));draw(true);}));
@@ -165,7 +169,7 @@ function openImage(evidence){
   dialog.append(close,img);document.body.append(dialog);dialog.addEventListener('close',()=>dialog.remove());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.showModal();
 }
 try{
-  const {RobotStage}=await import('./tour-robot.mjs?v=4.1');
+  const {RobotStage}=await import('./tour-robot.mjs?v=4.2');
   robot=new RobotStage($('robot-canvas'),$('scene-surface'),pause);draw(true);
   await robot.loadPromise;draw(true);
 }catch(error){

@@ -79,3 +79,25 @@ dragging rotates the view, and image selection enlarges the original result.
 The presentation has no evidence sidebar or under-canvas microcopy. All media
 use contain sizing, and recorded videos retain their original speed. Method
 results are shown as fixed reported values, including the readable online table.
+
+## Presentation refinement (4.2)
+
+Spatial scenes now distinguish the published robot from a translucent gold
+proposal. Fitting leaves the published state unchanged; cross-view assessment
+then permits a whole-state commit or keeps the measurement. A single seekable
+phase function drives the vectors, decision and articulated models. Display
+easing connects the before/after poses; it does not introduce an intermediate
+update rule. The motivation scene retains a measured-pose reference so that
+fitting-induced displacement is visible in geometry as well as the recorded plot.
+
+Temporal scenes connect corresponding motion events across the two streams,
+reveal the correlation search, and bring the events into alignment when the
+offset is applied. These signals are the existing deterministic teaching example.
+Mesh overlays use restrained Gaussian opacity to retain link contours, and
+both robot views use identical surface samples. Recorded-media borders and
+chapter-entry transitions follow the existing palette; no experimental outcomes,
+recordings or narration timings have changed.
+
+Validation includes publication order, fallback invariance, representation
+switching, every caption at desktop/mobile widths, full narrated playback and
+pixel-level checks for articulated motion and display modes.
